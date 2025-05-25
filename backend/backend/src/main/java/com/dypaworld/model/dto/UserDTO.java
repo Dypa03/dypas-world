@@ -14,12 +14,17 @@ public class UserDTO {
     private Integer id;
     private String username;
     private String email;
-    private String password; 
-    private String createdAt;
+    private String password;
 
     // Constructor for user registration
     public UserDTO(String username, String email, String password) {
         this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
+    // Constructor for user login
+    public UserDTO(String email, String password) {
         this.email = email;
         this.password = password;
     }

@@ -1,11 +1,14 @@
 package com.dypaworld.service;
 
+import com.dypaworld.model.dto.UserDTO;
+import com.dypaworld.model.entity.User;
+
 public interface UserService {
-    void registerUser(String username, String email, String password);
+    User registerUser(UserDTO userDTO);
     
-    boolean loginUser(String email, String password);
+    boolean loginUser(UserDTO userDTO);
 
-    void updateUserDetails(Integer userId, String username);
+    User updateUserDetails(UserDTO userDTO);
 
-    void deleteUser(Integer userId);
+    boolean deleteUser(Integer userId);
 }

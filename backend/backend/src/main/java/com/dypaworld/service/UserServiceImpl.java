@@ -1,5 +1,6 @@
 package com.dypaworld.service;
 
+import com.dypaworld.model.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,14 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public void registerUser(String username, String email, String password) {
+    public User registerUser(UserDTO userDTO) {
+        if (userDTO == null) {
+            throw new IllegalArgumentException("UserDTO cannot be null");
+        }
+        String username = userDTO.getUsername();
+        String email = userDTO.getEmail();
+        String password = userDTO.getPassword();
+
         if (username == null || email == null || password == null) {
             throw new IllegalArgumentException("Username, email, and password cannot be null");
         }
@@ -28,34 +36,41 @@ public class UserServiceImpl implements UserService {
 
         // Create a new User entity
         User newUser = new User(username, email, password);
-        userRepository.save(newUser);
-    };
+        return userRepository.save(newUser);
+    }
 
     @Override
-    public boolean loginUser(String email, String password) {
+    public boolean loginUser(UserDTO userDTO) {
+        if (userDTO == null) {
+            throw new IllegalArgumentException("UserDTO cannot be null");
+        }
+        String email = userDTO.getEmail();
+        String password = userDTO.getPassword();
+
         if (email == null || password == null) {
             throw new IllegalArgumentException("Email and password cannot be null");
         }
 
         User user = userRepository.findByEmail(email);
-        if (user != null && user.getPassword().equals(password)) {
-            return true;
+        if (user == null) {
+            throw new IllegalArgumentException("User not found with the provided email");
         } else {
-            return false;
+            if (user.getPassword().equals(password)) {
+                return true;
+            } else {
+                throw new IllegalArgumentException("Incorrect password");
+            }
         }
-         
     }
 
     @Override
-    public void updateUserDetails(Integer userId, String newDetails) {
-        // TODO: Implement the logic to update user details
-        return;
+    public User updateUserDetails(UserDTO userDTO) {
+        return null;
     }
 
     @Override
-    public void deleteUser(Integer userId) {
-        // TODO: Implement the logic to delete a user
-        return;
+    public boolean deleteUser(Integer userId) {
+        return false;
     }
 
 
