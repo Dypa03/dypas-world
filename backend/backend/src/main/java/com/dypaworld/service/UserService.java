@@ -3,6 +3,7 @@ package com.dypaworld.service;
 import com.dypaworld.model.dto.UserDTO;
 import com.dypaworld.model.entity.User;
 
+
 public interface UserService {
     User registerUser(UserDTO userDTO);
     
@@ -11,4 +12,6 @@ public interface UserService {
     User updateUserDetails(UserDTO userDTO);
 
     boolean deleteUser(Integer userId);
+
+    User getUserById(Integer userId);
 }

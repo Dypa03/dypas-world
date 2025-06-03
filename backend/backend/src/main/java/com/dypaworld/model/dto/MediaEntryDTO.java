@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
+import com.dypaworld.model.entity.User;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,26 +12,24 @@ import lombok.Setter;
 @Setter
 public class MediaEntryDTO {
     private Integer id;
-    private UserDTO user;
     private String title;
     private String category;
     private int rating;
-    private String text;
+    private String imageUrl;
     private String createdAt;
 
     // Constructor for media entry creation
-    public MediaEntryDTO(UserDTO user, String title, String category, int rating, String text) {
-        this.user = user;
+    public MediaEntryDTO(String title, String category, int rating, String imageUrl) {
         this.title = title;
         this.category = category;
         this.rating = rating;
-        this.text = text;
+        this.imageUrl = imageUrl;
     }
 
     // Constructor for media entry creation
-    public MediaEntryDTO(UserDTO user, String title, String category) {
-        this.user = user;
+    public MediaEntryDTO(String title, String category, String imageUrl) {
         this.title = title;
         this.category = category;
+        this.imageUrl = imageUrl;
     }
 }

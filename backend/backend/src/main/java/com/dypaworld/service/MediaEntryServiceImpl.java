@@ -7,25 +7,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.dypaworld.model.entity.MediaEntry;
 import com.dypaworld.model.dto.MediaEntryDTO;
 import com.dypaworld.repository.MediaEntryRepository;
+import org.springframework.stereotype.Service;
+import com.dypaworld.model.entity.User;
 
+@Service
 public class MediaEntryServiceImpl implements MediaEntryService {
 
     @Autowired
     private MediaEntryRepository mediaEntryRepository;
 
+    @Autowired
+    private UserService userService;
+
     @Override
-    public MediaEntry addMediaEntry(MediaEntryDTO mediaEntryDTO) {
+    public MediaEntry addMediaEntry(MediaEntryDTO mediaEntryDTO, Integer userId) {
         // TODO: refine
         if (mediaEntryDTO == null) {
             throw new IllegalArgumentException("Media entry data cannot be null");
         };
 
         MediaEntry mediaEntry = new MediaEntry();
-        mediaEntry.setUser(mediaEntryDTO.getUser());
         mediaEntry.setCategory(mediaEntryDTO.getCategory());
         mediaEntry.setTitle(mediaEntryDTO.getTitle());
-        mediaEntry.setDescription(mediaEntryDTO.getDescription());
-        mediaEntry.setUrl(mediaEntryDTO.getUrl());
+        mediaEntry.setImageUrl(mediaEntryDTO.getImageUrl());
+
+        User user = userService.getUserById(userId);
+        if (user == null) {
+            throw new IllegalArgumentException("User with ID " + userId + " does not exist");
+        }
+        mediaEntry.setUser(user);
 
         return mediaEntryRepository.save(mediaEntry);
     };
@@ -40,11 +50,12 @@ public class MediaEntryServiceImpl implements MediaEntryService {
         MediaEntry existingMediaEntry = mediaEntryRepository.findById(mediaEntryDTO.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Media entry with ID " + mediaEntryDTO.getId() + " does not exist"));
 
-        existingMediaEntry.setUserId(mediaEntryDTO.getUserId());
+
         existingMediaEntry.setCategory(mediaEntryDTO.getCategory());
         existingMediaEntry.setTitle(mediaEntryDTO.getTitle());
-        existingMediaEntry.setDescription(mediaEntryDTO.getDescription());
-        existingMediaEntry.setUrl(mediaEntryDTO.getUrl());
+        existingMediaEntry.setRating(mediaEntryDTO.getRating());
+        existingMediaEntry.setImageUrl(mediaEntryDTO.getImageUrl());
+
 
         return mediaEntryRepository.save(existingMediaEntry);
     };
@@ -91,5 +102,16 @@ public class MediaEntryServiceImpl implements MediaEntryService {
         return mediaEntryRepository.findMediaEntriesByUserIdAndCategory(userId, category);
     };
 
+    @Override
+    public List<MediaEntry> getAllMediaEntriesByUserId(Integer userId) {
+        // TODO: refine
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID and category cannot be null");
+        }
+
+
+
+        return mediaEntryRepository.findMediaEntriesByUserId(userId);
+    }
 
 }

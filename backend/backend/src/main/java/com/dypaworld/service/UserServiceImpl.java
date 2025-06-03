@@ -80,5 +80,15 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    @Override
+    public User getUserById(Integer userId) {
+        if (userId == null || userId <= 0) {
+            throw new IllegalArgumentException("User ID must be a positive integer");
+        }
+
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User with ID " + userId + " does not exist"));
+    }
+
 
 }

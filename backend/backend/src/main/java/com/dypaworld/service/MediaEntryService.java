@@ -5,7 +5,7 @@ import com.dypaworld.model.entity.MediaEntry;
 import java.util.List;
 
 public interface MediaEntryService {
-    MediaEntry addMediaEntry(MediaEntryDTO mediaEntryDTO);
+    MediaEntry addMediaEntry(MediaEntryDTO mediaEntryDTO, Integer userId);
 
     MediaEntry updateMediaEntry(MediaEntryDTO mediaEntryDTO);
 
@@ -14,4 +14,6 @@ public interface MediaEntryService {
     MediaEntry getMediaEntryById(Integer entryId);
 
     List<MediaEntry> getAllMediaEntriesByUserIdAndCategory(Integer userId, String category);
+
+    List<MediaEntry> getAllMediaEntriesByUserId(Integer userId);
 }
