@@ -10,7 +10,8 @@ import com.dypaworld.model.entity.MediaEntry;
 public interface MediaEntryRepository extends JpaRepository<MediaEntry, Integer> {
     // TODO: check if there are any custom query methods needed
     // For now, JpaRepository provides basic CRUD operations
-    public List<MediaEntry> findMediaEntriesByUserIdAndCategory(Integer userId, String category);
-    
-    //public List<MediaEntry> findMediaEntriesByUserId(Integer userId);
+    List<MediaEntry> findMediaEntriesByUserIdAndCategory(Integer userId, String category);
+
+    List<MediaEntry> findMediaEntriesByUserId(Integer userId);
+
 }

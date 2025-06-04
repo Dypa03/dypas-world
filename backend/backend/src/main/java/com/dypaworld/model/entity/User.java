@@ -3,6 +3,7 @@ package com.dypaworld.model.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
@@ -46,6 +47,7 @@ public class User {
 
     // OneToMany relationship with MediaEntry
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<MediaEntry> mediaEntries;
 
     // Additional constructor for user registration

@@ -42,18 +42,18 @@ public class MediaEntry {
 
     private int rating;
 
-    private String text;
+    private String imageUrl;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     // Additional constructor for media entry creation
-    public MediaEntry(User user, String title, String category, int rating, String text) {
+    public MediaEntry(User user, String title, String category, int rating, String imageUrl) {
         this.user = user;
         this.title = title;
         this.category = category;
         this.rating = rating;
-        this.text = text;
+        this.imageUrl = imageUrl;
     }
 }
