@@ -25,6 +25,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "media_entries")
 public class MediaEntry {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "media_entry_id")
