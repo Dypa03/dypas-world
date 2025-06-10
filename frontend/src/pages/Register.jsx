@@ -24,7 +24,7 @@ export default function Register() {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*", // Allow CORS for all origins
+                    "Access-Control-Allow-Origin": "*" // Allow CORS for all origins
                 },
                 body: JSON.stringify(formData) // Convert formData to JSON string
                 });
