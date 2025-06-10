@@ -1,5 +1,5 @@
 // backend/src/main/java/com/dypaworld/SecurityConfig.java
-package com.dypaworld;
+package com.dypaworld.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,7 @@ public class SecurityConfig {
                         authorizeRequests.anyRequest().authenticated())
                 //.formLogin(form -> form.defaultSuccessUrl("/api/user/greet", true))
                 .oauth2Login(oauth2 ->
-                        oauth2.defaultSuccessUrl("/api/user/greet", true))
+                        oauth2.defaultSuccessUrl("http://localhost:5173/", true))
         ;
         return http.build();
     }

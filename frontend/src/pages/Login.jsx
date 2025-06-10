@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Header from "../myComponents/Header";
+import OAuthLogin from "../myComponents/OAuthLogin";
+
 
 
 export default function Login() {
@@ -59,6 +61,8 @@ export default function Login() {
                     </div>
                     <button type="submit">Login</button>
                 </form>
+
+                <OAuthLogin />
             </main>
         </div>
     )
