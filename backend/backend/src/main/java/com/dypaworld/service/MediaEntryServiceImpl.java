@@ -20,7 +20,7 @@ public class MediaEntryServiceImpl implements MediaEntryService {
     private UserService userService;
 
     @Override
-    public MediaEntry addMediaEntry(MediaEntryDTO mediaEntryDTO, Integer userId) {
+    public MediaEntry addMediaEntry(MediaEntryDTO mediaEntryDTO, User user) {
         // TODO: refine
         if (mediaEntryDTO == null) {
             throw new IllegalArgumentException("Media entry data cannot be null");
@@ -31,10 +31,10 @@ public class MediaEntryServiceImpl implements MediaEntryService {
         mediaEntry.setTitle(mediaEntryDTO.getTitle());
         mediaEntry.setImageUrl(mediaEntryDTO.getImageUrl());
 
-        User user = userService.getUserById(userId);
-        if (user == null) {
-            throw new IllegalArgumentException("User with ID " + userId + " does not exist");
-        }
+
+        /*if (user == null) {
+            throw new IllegalArgumentException("User with ID " + user.getId() + " does not exist");
+        }*/
         mediaEntry.setUser(user);
 
         return mediaEntryRepository.save(mediaEntry);
@@ -88,18 +88,9 @@ public class MediaEntryServiceImpl implements MediaEntryService {
     };
 
     @Override
-    public List<MediaEntry> getAllMediaEntriesByUserIdAndCategory(Integer userId, String category) {
+    public List<MediaEntry> getAllMediaEntriesByUserAndCategory(User user, String category) {
         // TODO: refine
-        if (userId == null || category == null) {
-            throw new IllegalArgumentException("User ID and category cannot be null");
-        }
-
-        // Check if the user exists
-        if (!mediaEntryRepository.existsById(userId)) {
-            throw new IllegalArgumentException("User with ID " + userId + " does not exist");
-        }
-
-        return mediaEntryRepository.findMediaEntriesByUserIdAndCategory(userId, category);
+        return mediaEntryRepository.findMediaEntriesByUserAndCategory(user, category);
     };
 
     @Override

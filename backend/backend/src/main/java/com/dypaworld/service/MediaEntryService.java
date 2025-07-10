@@ -2,10 +2,12 @@ package com.dypaworld.service;
 
 import com.dypaworld.model.dto.MediaEntryDTO;
 import com.dypaworld.model.entity.MediaEntry;
+import com.dypaworld.model.entity.User;
+
 import java.util.List;
 
 public interface MediaEntryService {
-    MediaEntry addMediaEntry(MediaEntryDTO mediaEntryDTO, Integer userId);
+    MediaEntry addMediaEntry(MediaEntryDTO mediaEntryDTO, User user);
 
     MediaEntry updateMediaEntry(MediaEntryDTO mediaEntryDTO);
 
@@ -13,7 +15,7 @@ public interface MediaEntryService {
 
     MediaEntry getMediaEntryById(Integer entryId);
 
-    List<MediaEntry> getAllMediaEntriesByUserIdAndCategory(Integer userId, String category);
+    List<MediaEntry> getAllMediaEntriesByUserAndCategory(User user, String category);
 
     List<MediaEntry> getAllMediaEntriesByUserId(Integer userId);
 }

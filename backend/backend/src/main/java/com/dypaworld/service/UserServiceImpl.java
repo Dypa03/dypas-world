@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import com.dypaworld.model.entity.User;
 import com.dypaworld.repository.UserRepository;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -20,11 +22,11 @@ public class UserServiceImpl implements UserService {
         if (userDTO == null) {
             throw new IllegalArgumentException("UserDTO cannot be null");
         }
-        String username = userDTO.getUsername();
+        String name = userDTO.getName();
         String email = userDTO.getEmail();
         String password = userDTO.getPassword();
 
-        if (username == null || email == null || password == null) {
+        if (name == null || email == null || password == null) {
             throw new IllegalArgumentException("Username, email, and password cannot be null");
         }
 
@@ -32,12 +34,12 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Email already exists");
         }
 
-        if (userRepository.existsByUsername(username)) {
+        if (userRepository.existsByName(name)) {
             throw new IllegalArgumentException("Username already exists");
         }
 
         // Create a new User entity and save it to the repository
-        User newUser = new User(username, email, password);
+        User newUser = new User(name, email, password);
         return userRepository.save(newUser);
     }
 
@@ -54,11 +56,11 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Email and password cannot be null");
         }
 
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) {
             throw new IllegalArgumentException("User not found with the provided email");
         } else {
-            if (user.getPassword().equals(password)) {
+            if (user.get().getPassword().equals(password)) {
                 return true;
             } else {
                 throw new IllegalArgumentException("Incorrect password");

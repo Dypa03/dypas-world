@@ -1,5 +1,6 @@
 package com.dypaworld.model.entity;
 
+import java.security.AuthProvider;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,16 +30,14 @@ import lombok.Setter;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "user_id", unique = true, nullable = false)
     private Integer id;
 
-    @Column(nullable = false)
-    private String username;
+    private String name;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
     private String password;
 
     @CreationTimestamp
@@ -51,8 +50,8 @@ public class User {
     private List<MediaEntry> mediaEntries;
 
     // Additional constructor for user registration
-    public User(String username, String email, String password) {
-        this.username = username;
+    public User(String name, String email, String password) {
+        this.name = name;
         this.email = email;
         this.password = password;
     }

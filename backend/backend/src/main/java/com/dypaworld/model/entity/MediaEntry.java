@@ -46,7 +46,7 @@ public class MediaEntry {
     private String imageUrl;
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     // Additional constructor for media entry creation
