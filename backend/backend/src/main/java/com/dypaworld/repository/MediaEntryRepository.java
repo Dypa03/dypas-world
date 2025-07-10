@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface MediaEntryRepository extends JpaRepository<MediaEntry, Integer> {
     // TODO: check if there are any custom query methods needed
     // For now, JpaRepository provides basic CRUD operations
-        List<MediaEntry> findMediaEntriesByUserAndCategory(User user, String category);
+    List<MediaEntry> findMediaEntriesByUserAndCategory(User user, String category);
 
     List<MediaEntry> findMediaEntriesByUserId(Integer userId);
 

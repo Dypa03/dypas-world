@@ -18,7 +18,7 @@ export default function MoviePage() {
 
     const loadMovieData = async () => {
         try {
-            const response = await fetch("http://localhost:8080/api/media-entry/get-all-by-category-user-id?category=movie", {
+            const response = await fetch("http://localhost:8080/api/media-entry/get-all-by-category-user?category=movie", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

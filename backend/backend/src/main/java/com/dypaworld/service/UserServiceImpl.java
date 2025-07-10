@@ -15,10 +15,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    // registerUser method to create a new user
+
     @Override
     public User registerUser(UserDTO userDTO) {
-        // Error handling
         if (userDTO == null) {
             throw new IllegalArgumentException("UserDTO cannot be null");
         }
@@ -38,12 +37,10 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Username already exists");
         }
 
-        // Create a new User entity and save it to the repository
         User newUser = new User(name, email, password);
         return userRepository.save(newUser);
     }
 
-    // loginUser method to authenticate a user
     @Override
     public boolean loginUser(UserDTO userDTO) {
         if (userDTO == null) {
@@ -68,7 +65,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    // updateUserDetails method to update user information, like username or email, or password
+
     @Override
     public User updateUserDetails(UserDTO userDTO) {
         // TODO: Implement the logic to update user details

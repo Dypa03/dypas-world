@@ -19,14 +19,6 @@ public class MediaEntryDTO {
     private String createdAt;
 
     // Constructor for media entry creation
-    public MediaEntryDTO(String title, String category, int rating, String imageUrl) {
-        this.title = title;
-        this.category = category;
-        this.rating = rating;
-        this.imageUrl = imageUrl;
-    }
-
-    // Constructor for media entry creation
     public MediaEntryDTO(String title, String category, String imageUrl) {
         this.title = title;
         this.category = category;

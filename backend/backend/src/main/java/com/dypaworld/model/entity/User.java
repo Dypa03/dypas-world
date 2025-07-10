@@ -33,6 +33,7 @@ public class User {
     @Column(name = "user_id", unique = true, nullable = false)
     private Integer id;
 
+    @Column(unique = true)
     private String name;
 
     @Column(unique = true, nullable = false)
