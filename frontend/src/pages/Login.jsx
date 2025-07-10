@@ -35,7 +35,7 @@ export default function Login() {
                 alert("login successful!")
             } else {
                 const errorData = await response.json()
-                alert(`Error: ${errorData.message || "Failed to register user"}`);
+                alert(`Error: ${errorData.message || "Failed to login user"}`);
             }
         } catch (error) {
             console.error("Error during registration:", error);

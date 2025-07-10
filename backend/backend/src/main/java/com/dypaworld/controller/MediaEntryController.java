@@ -3,9 +3,14 @@ package com.dypaworld.controller;
 import com.dypaworld.model.dto.MediaEntryDTO;
 
 import java.util.List;
+import java.util.Optional;
 
 
+import com.dypaworld.model.entity.User;
+import com.dypaworld.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import com.dypaworld.model.entity.MediaEntry;
 import com.dypaworld.service.MediaEntryService;
@@ -17,15 +22,25 @@ public class MediaEntryController {
     @Autowired
     private MediaEntryService mediaEntryService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @PostMapping(path = "/add")
-    public MediaEntry addMediaEntry(@RequestBody MediaEntryDTO mediaEntryDTO, @RequestParam("userId") Integer userId) {
-        return mediaEntryService.addMediaEntry(mediaEntryDTO, userId);
+    public MediaEntry addMediaEntry(@RequestBody MediaEntryDTO mediaEntryDTO,
+                                     @AuthenticationPrincipal OAuth2User principal) {
+        String email = principal.getAttribute("email");
+        Optional<User> user = userRepository.findByEmail(email);
+        return mediaEntryService.addMediaEntry(mediaEntryDTO, user.orElse(null));
     }
 
     @GetMapping(path = "/get-all-by-category-user-id")
-    public List<MediaEntry> getMediaEntryByUserIdAndCategory(@RequestParam("userId") Integer userId,
-                                            @RequestParam("category") String category) {
-        return mediaEntryService.getAllMediaEntriesByUserIdAndCategory(userId, category);
+    public List<MediaEntry> getMediaEntryByUserAndCategory(@RequestParam("category") String category,
+                                                             @AuthenticationPrincipal OAuth2User principal) {
+        String email = principal.getAttribute("email");
+
+        Optional<User> user = userRepository.findByEmail(email);
+
+        return mediaEntryService.getAllMediaEntriesByUserAndCategory(user.orElse(null), category);
         
     }
 

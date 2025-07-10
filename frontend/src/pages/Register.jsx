@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Header from "../myComponents/Header";
-
+import OAuthRegister from "../myComponents/OAuthRegister";
 
 export default function Register() {
     const [formData, setFormData] = useState({
@@ -62,6 +62,8 @@ export default function Register() {
                     </div>
                     <button type="submit">Register</button>
                 </form>
+
+                <OAuthRegister />
             </main>
         </div>
     )
