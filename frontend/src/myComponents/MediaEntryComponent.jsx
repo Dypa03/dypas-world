@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
+import MediaEntryCard from "./MediaEntryCard";
 
-export default function MoviePage() {
-    const [movieData, setMovieData] = useState([]);
+export default function MediaEntryPageComponent(props) {
+    const [mediaEntryData, setMediaEntryData] = useState([]);
 
     const [formData, setFormData] = useState({
         title: '',
         imageUrl: '',
-        category: 'movie',
+        category: props.category,
     });
 
     const handleChange = (e) => {
@@ -18,7 +19,8 @@ export default function MoviePage() {
 
     const loadMovieData = async () => {
         try {
-            const response = await fetch("http://localhost:8080/api/media-entry/get-all-by-category-user-id?category=movie", {
+            
+            const response = await fetch(`http://localhost:8080/api/media-entry/get-all-by-category-user-id?category=${props.category}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -29,7 +31,7 @@ export default function MoviePage() {
 
             if (response.ok) {
                 const data = await response.json();
-                setMovieData(data);
+                setMediaEntryData(data);
             } else {
                 const errorData = await response.json();
                 alert(`Error: ${errorData.message || "Failed to fetch movie data"}`);
@@ -42,7 +44,7 @@ export default function MoviePage() {
         }
     }
 
-    const handleSubmit = async (e) => {
+    const handleMediaEntrySubmit = async (e) => {
         e.preventDefault();
 
         try {
@@ -57,7 +59,6 @@ export default function MoviePage() {
             });
 
             if (response.ok) {
-                // TODO: make it actually work lmao
                 alert("added successful!")
             } else {
                 const errorData = await response.json()
@@ -78,22 +79,17 @@ export default function MoviePage() {
 
     return (
         <div className="movie-page">
-            <h1>Movie Page</h1>
-            <p>This is the movie page content.</p>
-            { movieData.length > 0 ? (
-                <ul>
-                    {movieData.map((movie) => (
-                        <li key={movie.id}>
-                            <h2>{movie.title}</h2>
-                            <img src={movie.imageUrl} alt={movie.title} />
-                        </li>
-                    ))}
-                </ul>
+            <h1>{props.category} Page</h1>
+            <p>This is the {props.category} page content.</p>
+            { mediaEntryData.length > 0 ? (
+                mediaEntryData.map((mediaItem) => (
+                    <MediaEntryCard key={mediaItem.id} mediaItem={mediaItem} />
+                ))
             ) : (
-                <p>No movies found.</p>
+                <p>No {props.category}s found.</p>
             )}
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleMediaEntrySubmit}>
                 <div>
                     <label htmlFor="title">Title:</label>
                     <input type="text" id="title" name="title" value={formData.title} onChange={handleChange} required />

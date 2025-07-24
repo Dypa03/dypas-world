@@ -37,9 +37,7 @@ public class MediaEntryController {
     public List<MediaEntry> getMediaEntryByUserAndCategory(@RequestParam("category") String category,
                                                              @AuthenticationPrincipal OAuth2User principal) {
         String email = principal.getAttribute("email");
-
         Optional<User> user = userRepository.findByEmail(email);
-
         return mediaEntryService.getAllMediaEntriesByUserAndCategory(user.orElse(null), category);
         
     }

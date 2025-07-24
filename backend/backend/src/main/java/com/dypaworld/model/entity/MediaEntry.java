@@ -28,7 +28,7 @@ public class MediaEntry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "media_entry_id")
+    @Column(name = "media_entry_id")    
     private Integer id;
 
     @ManyToOne
