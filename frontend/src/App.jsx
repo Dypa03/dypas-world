@@ -3,7 +3,8 @@ import HomePage from './pages/HomePage'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import './App.css'
-import MediaEntryPageComponent from './myComponents/MediaEntryComponent'
+import MediaEntryPageComponent from './myComponents/MediaEntryPageComponent'
+import Header from './myComponents/Header'
 
 
 function App() {

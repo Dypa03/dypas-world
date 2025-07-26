@@ -3,7 +3,7 @@ import logo from '../assets/wizard-logo-rb.png';
 
 export default function Header() {
     return (
-        <header className='bg-n-white w-full h-header flex items-center justify-between px-56 absolute top-0 left-0 z-50'
+        <header className='bg-n-white w-full h-header flex items-center justify-between px-56 absolute top-0 left-0 z-50 '
                 onClick={() => window.location.href = '/'}>
 
                 <div className='logo-container flex items-center text-t-logo font-bold '>

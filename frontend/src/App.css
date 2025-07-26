@@ -49,6 +49,10 @@ body {
 
 }
 
+header {
+  box-shadow: 0 20px 40px rgba(32, 14, 134, 0.29), 0 5px 10px rgba(124, 124, 124, 0.26);
+}
+
 .login-button {
   box-shadow: 0 20px 40px rgba(255, 174, 0, 0.29), 0 5px 10px rgba(255, 174, 0, 0.26);
 }
