@@ -57,3 +57,13 @@ body {
   width: 45%;
   transform: translate(-10px, 40px);
 }
+
+.intro-section {
+  background-image: url('/path/to/kirby.png');
+  background-repeat: no-repeat;
+  background-size: contain; /* o cover */
+  background-position: right bottom;
+
+  z-index: 1;
+  overflow: hidden;
+}

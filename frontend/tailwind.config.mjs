@@ -17,7 +17,11 @@ module.exports = {
       },
       height: {
         'section': 'calc(100vh - 230px)',
-        'header': '76px'
+        'header': '76px',
+        'card': '301px'
+      },
+      width: {
+        'card': '350px'
       }
     },
   },
