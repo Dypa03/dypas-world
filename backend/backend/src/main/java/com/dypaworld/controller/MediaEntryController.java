@@ -33,19 +33,19 @@ public class MediaEntryController {
         return mediaEntryService.addMediaEntry(mediaEntryDTO, user.orElse(null));
     }
 
-    @GetMapping(path = "/get-all-by-category-user-id")
+    @GetMapping(path = "/get-all-by-category-user")
     public List<MediaEntry> getMediaEntryByUserAndCategory(@RequestParam("category") String category,
                                                              @AuthenticationPrincipal OAuth2User principal) {
         String email = principal.getAttribute("email");
         Optional<User> user = userRepository.findByEmail(email);
         return mediaEntryService.getAllMediaEntriesByUserAndCategory(user.orElse(null), category);
-        
     }
 
     @GetMapping(path = "/get-all-by-user-id")
-    public List<MediaEntry> getMediaEntryByUserId(@RequestParam("userId") Integer userId) {
-        return mediaEntryService.getAllMediaEntriesByUserId(userId);
-
+    public List<MediaEntry> getMediaEntryByUserId(@AuthenticationPrincipal OAuth2User principal) {
+        String email = principal.getAttribute("email");
+        Optional<User> user = userRepository.findByEmail(email);
+        return mediaEntryService.getAllMediaEntriesByUser(user.orElse(null));
     }
 
     @PostMapping(path = "/delete")

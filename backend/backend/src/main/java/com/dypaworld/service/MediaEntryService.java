@@ -17,5 +17,5 @@ public interface MediaEntryService {
 
     List<MediaEntry> getAllMediaEntriesByUserAndCategory(User user, String category);
 
-    List<MediaEntry> getAllMediaEntriesByUserId(Integer userId);
+    List<MediaEntry> getAllMediaEntriesByUser(User user);
 }

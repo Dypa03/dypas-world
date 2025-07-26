@@ -28,7 +28,11 @@ public class MediaEntry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+<<<<<<< HEAD
     @Column(name = "media_entry_id")    
+=======
+    @Column(name = "media_entry_id", unique = true, nullable = false)
+>>>>>>> 0f31f68f520c9ed24e026cfd5de99076f460e67d
     private Integer id;
 
     @ManyToOne

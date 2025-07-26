@@ -21,20 +21,19 @@ public class MediaEntryServiceImpl implements MediaEntryService {
 
     @Override
     public MediaEntry addMediaEntry(MediaEntryDTO mediaEntryDTO, User user) {
-        // TODO: refine
-        if (mediaEntryDTO == null) {
+        if (mediaEntryDTO == null || mediaEntryDTO.getCategory() == null || mediaEntryDTO.getTitle() == null) {
             throw new IllegalArgumentException("Media entry data cannot be null");
         };
+
+        if (user == null || user.getId() == null) {
+            throw new IllegalArgumentException("User is not authenticated or does not exist");
+        }
 
         MediaEntry mediaEntry = new MediaEntry();
         mediaEntry.setCategory(mediaEntryDTO.getCategory());
         mediaEntry.setTitle(mediaEntryDTO.getTitle());
         mediaEntry.setImageUrl(mediaEntryDTO.getImageUrl());
 
-
-        /*if (user == null) {
-            throw new IllegalArgumentException("User with ID " + user.getId() + " does not exist");
-        }*/
         mediaEntry.setUser(user);
 
         return mediaEntryRepository.save(mediaEntry);
@@ -42,7 +41,6 @@ public class MediaEntryServiceImpl implements MediaEntryService {
 
     @Override
     public MediaEntry updateMediaEntry(MediaEntryDTO mediaEntryDTO) {
-        // TODO: refine
         if (mediaEntryDTO == null || mediaEntryDTO.getId() == null) {
             throw new IllegalArgumentException("Media entry data cannot be null and must have an ID");
         }
@@ -50,24 +48,20 @@ public class MediaEntryServiceImpl implements MediaEntryService {
         MediaEntry existingMediaEntry = mediaEntryRepository.findById(mediaEntryDTO.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Media entry with ID " + mediaEntryDTO.getId() + " does not exist"));
 
-
         existingMediaEntry.setCategory(mediaEntryDTO.getCategory());
         existingMediaEntry.setTitle(mediaEntryDTO.getTitle());
         existingMediaEntry.setRating(mediaEntryDTO.getRating());
         existingMediaEntry.setImageUrl(mediaEntryDTO.getImageUrl());
-
 
         return mediaEntryRepository.save(existingMediaEntry);
     };
 
     @Override
     public boolean deleteMediaEntry(Integer entryId) {
-        // TODO: refine
         if (entryId <= 0) {;
             throw new IllegalArgumentException("Entry ID must be a positive integer");
         }
 
-        // Check if the media entry exists
         if (!mediaEntryRepository.existsById(entryId)) {
             throw new IllegalArgumentException("Media entry with ID " + entryId + " does not exist");
         }
@@ -78,7 +72,6 @@ public class MediaEntryServiceImpl implements MediaEntryService {
 
     @Override
     public MediaEntry getMediaEntryById(Integer entryId) {
-        // TODO: refine
         if (entryId == null || entryId <= 0) {
             throw new IllegalArgumentException("Entry ID must be a positive integer");
         }
@@ -89,20 +82,23 @@ public class MediaEntryServiceImpl implements MediaEntryService {
 
     @Override
     public List<MediaEntry> getAllMediaEntriesByUserAndCategory(User user, String category) {
-        // TODO: refine
+        if (user == null || user.getId() == null) {
+            throw new IllegalArgumentException("User is not authenticated or does not exist");
+        }
+        if (category == null || category.isEmpty()) {
+            throw new IllegalArgumentException("Category cannot be null or empty");
+        }
+
         return mediaEntryRepository.findMediaEntriesByUserAndCategory(user, category);
     };
 
     @Override
-    public List<MediaEntry> getAllMediaEntriesByUserId(Integer userId) {
-        // TODO: refine
-        if (userId == null) {
-            throw new IllegalArgumentException("User ID and category cannot be null");
+    public List<MediaEntry> getAllMediaEntriesByUser(User user) {
+        if (user == null || user.getId() == null) {
+            throw new IllegalArgumentException("User is not authenticated or does not exist");
         }
 
-
-
-        return mediaEntryRepository.findMediaEntriesByUserId(userId);
+        return mediaEntryRepository.findMediaEntriesByUserId(user.getId());
     }
 
 }
