@@ -77,7 +77,7 @@ export default function MediaEntryPageComponent(props) {
 
 
     return (
-        <div className="movie-page">
+        <div className="">
             <Header/>
             <div className="bg-main-color h-auto p-20">
                 <h1>{props.category} Page</h1>
@@ -91,7 +91,9 @@ export default function MediaEntryPageComponent(props) {
                 )}
                 </div>
 
-                <form onSubmit={handleMediaEntrySubmit}>
+                <form onSubmit={handleMediaEntrySubmit}
+                    className="bg-n-black"
+                >
                     <div>
                         <label htmlFor="title">Title:</label>
                         <input type="text" id="title" name="title" value={formData.title} onChange={handleChange} required />
