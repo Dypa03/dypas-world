@@ -75,9 +75,13 @@ export default function HomePage() {
 
         </div>
 
-        <footer className="w-full h-60 bg-n-black text-n-white mt-16">
-          <div className="footer bg-n-black text-n-white h-20 flex items-center justify-center">
+        <footer className="w-full h-40 bg-n-black text-n-white mt-16 p-10">
+          <div className="divider h-0.5 bg-gray-700 w-3/4 mx-auto"></div>
+          <div className="footer-text bg-n-black text-n-white h-20 flex items-center justify-center">
             <p className="text-lg">© 2025 Deez Nuts. All rights reserved.</p>
+            <div>
+              If you want to see unfinished projects, here's my Github
+            </div>
           </div>
         </footer>
       </main>
