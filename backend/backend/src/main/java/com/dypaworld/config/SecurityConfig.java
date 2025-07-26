@@ -31,6 +31,4 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults());
         return http.build();
     }
-
-
 }
