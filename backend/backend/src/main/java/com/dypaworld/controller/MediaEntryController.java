@@ -41,7 +41,7 @@ public class MediaEntryController {
         return mediaEntryService.getAllMediaEntriesByUserAndCategory(user.orElse(null), category);
     }
 
-    @GetMapping(path = "/get-all-by-user-id")
+    @GetMapping(path = "/get-all-by-user")
     public List<MediaEntry> getMediaEntryByUserId(@AuthenticationPrincipal OAuth2User principal) {
         String email = principal.getAttribute("email");
         Optional<User> user = userRepository.findByEmail(email);

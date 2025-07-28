@@ -5,6 +5,8 @@ import com.dypaworld.model.entity.User;
 import com.dypaworld.service.UserService;
 import com.dypaworld.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +37,14 @@ public class UserController {
     }
 
     @GetMapping(path = "/user-info")
-    public Map<String, Object> getUserInfo(
+    public ResponseEntity<Map<String, Object>> getUserInfo(
             @AuthenticationPrincipal OAuth2User principal) {
-        return  principal.getAttributes();
+
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        System.out.println(principal.getAttributes());
+        return ResponseEntity.ok(principal.getAttributes());
     }
 }

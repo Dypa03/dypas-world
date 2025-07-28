@@ -8,12 +8,12 @@ import Header from './myComponents/Header'
 
 
 function App() {
-  const categoryList = ["Movie", "TV-Show", "Anime", "Video Game", "Album", "Book", "Comic", "Manga"]
+  const categoryList = ["movie", "tv-show", "anime", "game", "album", "book", "comic", "manga"]
 
   const categoryRoutes = categoryList.map((category) => (
     <Route
       key={category}
-      path={`/${category.toLowerCase()}s`}
+      path={`/${category}s`}
       element={<MediaEntryPageComponent category={category} />}
     />
   ))

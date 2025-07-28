@@ -2,6 +2,51 @@ import logo from '../assets/wizard-logo-rb.png';
 //import home from '../assets/home-icon.svg';
 
 export default function Header() {
+    async function checkUserLogin() {
+        try {
+            const response = await fetch("http://localhost:8080/api/user/user-info", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include"
+            });
+            
+            if (response.redirected && response.url.includes('/login')) {
+                console.log("User is NOT logged in - redirected to login");
+                return { loggedIn: false };
+            }
+    
+            if (response.status === 401) {
+                console.log("User is NOT logged in - 401 Unauthorized");
+                return { loggedIn: false };
+            }
+    
+            if (response.ok) {
+                const userInfo = await response.json();
+                console.log("User IS logged in:", userInfo);
+                return { loggedIn: true, userInfo };
+            }
+    
+            console.log("Unexpected response:", response.status);
+            return { loggedIn: false };
+    
+        } catch (error) {
+            console.error("Error checking login status:", error);
+            return { loggedIn: false };
+        }
+      }
+    
+    
+    checkUserLogin().then(result => {
+        if (result.loggedIn) {
+            console.log("Welcome back!", result.userInfo);
+        } else {
+            console.log("Please log in");
+        }
+    });
+
+
     return (
         <header className='bg-n-white w-full h-header flex items-center justify-between px-56 absolute top-0 left-0 z-50 '
                 onClick={() => window.location.href = '/'}>
