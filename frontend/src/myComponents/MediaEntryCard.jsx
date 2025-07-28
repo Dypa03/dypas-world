@@ -15,7 +15,7 @@ export default function MediaEntryCard({ mediaItem }) {
         <div className="media-entry-card">
             <img src={mediaItem.imageUrl} alt={mediaItem.title} />
             <h2>{mediaItem.title}</h2>
-            {ratingStars}
+            
             
             <p>Uploaded on: {new Date(mediaItem.createdAt).toLocaleDateString()}</p>
         </div>

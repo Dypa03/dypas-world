@@ -18,10 +18,11 @@ export default function MediaEntryPageComponent(props) {
         }));
     };
 
-    const loadMovieData = async () => {
+    const loadEntryData = async () => {
         try {
             
-            const response = await fetch(`http://localhost:8080/api/media-entry/get-all-by-category-user-id?category=${props.category}`, {
+
+            const response = await fetch(`http://localhost:8080/api/media-entry/get-all-by-category-user?category=${props.category.toLowerCase()}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -35,11 +36,11 @@ export default function MediaEntryPageComponent(props) {
                 setMediaEntryData(data);
             } else {
                 const errorData = await response.json();
-                console.log(`Error: ${errorData.message || "Failed to fetch movie data"}`);
+                console.log(`Error: ${errorData.message || "Failed to fetch entry data"}`);
             }
 
         } catch (error) {
-            console.error("Error fetching movie data:", error);
+            console.error("Error fetching entry data:", error);
         }
     }
 
@@ -61,7 +62,7 @@ export default function MediaEntryPageComponent(props) {
                 alert("added successful!")
             } else {
                 const errorData = await response.json()
-                alert(`Error: ${errorData.message || "Failed to login user"}`);
+                alert(`Error: ${errorData.message || "Failed to load media entry"}`);
             }
         } catch (error) {
             console.error("Error during registration:", error);
@@ -72,10 +73,11 @@ export default function MediaEntryPageComponent(props) {
 
 
     useEffect(() => {
-        loadMovieData();
+        loadEntryData();
     }, []);
 
 
+    console.log(formData);
     return (
         <div className="">
             <Header/>

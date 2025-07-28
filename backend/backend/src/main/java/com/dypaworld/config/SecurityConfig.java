@@ -9,7 +9,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -28,7 +31,21 @@ public class SecurityConfig {
                                 .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
                                 .defaultSuccessUrl("http://localhost:5173", true))
 
+                /*.sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(false)
+                )
+                .rememberMe(remember -> remember
+                        .tokenRepository(persistentTokenRepository())
+                        .tokenValiditySeconds(86400)
+                        .userDetailsService(customOAuth2UserService)
+                )*/
                 .cors(Customizer.withDefaults());
+
+
         return http.build();
     }
+
+
 }
