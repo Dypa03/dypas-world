@@ -1,55 +1,15 @@
 import logo from '../assets/wizard-logo-rb.png';
 //import home from '../assets/home-icon.svg';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function Header() {
-    async function checkUserLogin() {
-        try {
-            const response = await fetch("http://localhost:8080/api/user/user-info", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include"
-            });
-            
-            if (response.redirected && response.url.includes('/login')) {
-                console.log("User is NOT logged in - redirected to login");
-                return { loggedIn: false };
-            }
     
-            if (response.status === 401) {
-                console.log("User is NOT logged in - 401 Unauthorized");
-                return { loggedIn: false };
-            }
-    
-            if (response.ok) {
-                const userInfo = await response.json();
-                console.log("User IS logged in:", userInfo);
-                return { loggedIn: true, userInfo };
-            }
-    
-            console.log("Unexpected response:", response.status);
-            return { loggedIn: false };
-    
-        } catch (error) {
-            console.error("Error checking login status:", error);
-            return { loggedIn: false };
-        }
-      }
-    
-    
-    checkUserLogin().then(result => {
-        if (result.loggedIn) {
-            console.log("Welcome back!", result.userInfo);
-        } else {
-            console.log("Please log in");
-        }
-    });
 
+    const navigate = useNavigate();
 
     return (
-        <header className='bg-n-white w-full h-header flex items-center justify-between px-56 absolute top-0 left-0 z-50 '
-                onClick={() => window.location.href = '/'}>
+        <header className='bg-n-white w-full h-header flex items-center justify-between px-56 absolute top-0 left-0 z-50 '>
 
                 <div className='logo-container flex items-center text-t-logo font-bold '>
                     <img src={logo} alt='Wizard Logo' 
@@ -77,11 +37,13 @@ export default function Header() {
                             <i className='fa fa-home pr-1'></i>
                             <span className='text-gray-700 ml-1 font-bold hover:text-n-white transition duration-300'>Homepage</span>
                     </button>
+                    
                     <button className='login-button w-1/2 text-lg text-secondary-color p-2 rounded-lg bg-n-white hover:bg-secondary-color hover:text-n-white transition duration-300'
-                            onClick={() => window.location.href='/login'}>
+                    onClick={()=> navigate('/login')}>
                             <i className='fa fa-user pr-1'></i>
                             Login
                     </button>
+                    
                 </div>
             
         </header>
