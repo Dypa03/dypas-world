@@ -1,5 +1,6 @@
 
 import Header from "../myComponents/Header"
+import Footer from "../myComponents/Footer"
 import mainImage from '../assets/main-image.png'
 
 
@@ -70,7 +71,7 @@ export default function HomePage() {
           <h3 className="mt-14 font-bold text-5xl">
             All Categories
           </h3>
-          <div className="categories grid grid-cols-4 gap-10 mt-14">
+          <div className="categories grid grid-cols-4 gap-10 my-14">
             {categoriesCards}
           </div>
 
@@ -78,6 +79,7 @@ export default function HomePage() {
 
         
       </main>
+      <Footer />
     </>
   )
 }

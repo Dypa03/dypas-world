@@ -1,8 +1,20 @@
 import React, { useState, useEffect } from "react";
 import MediaEntryCard from "./MediaEntryCard";
 import Header from "./Header"
+import Footer from "./Footer";
 
 export default function MediaEntryPageComponent(props) {
+    const categoryBasedMessage = {
+        "movie": "watched",
+        "tv-show": "watched",
+        "anime": "watched",
+        "game": "played",
+        "album": "listened to",
+        "book": "read",
+        "comic": "read",
+        "manga": "read",
+    }
+
     const [mediaEntryData, setMediaEntryData] = useState([]);
 
     const [formData, setFormData] = useState({
@@ -77,13 +89,24 @@ export default function MediaEntryPageComponent(props) {
     }, []);
 
 
-    console.log(formData);
+
+
     return (
         <div className="">
             <Header/>
-            <div className="bg-main-color h-auto p-20">
-                <h1>{props.category} Page</h1>
-                <p>This is the {props.category} page content.</p>
+            <div className="bg-main-color h-auto py-20 px-80">
+                <div className="welcome-message flex flex-col items-center mt-16">
+                    <h1 className="text-6xl font-bold first-letter:uppercase">
+                        {props.category}s
+                    </h1>
+                    <p className="text-1xl">
+                        You have {categoryBasedMessage[props.category]}: {mediaEntryData.length}
+                    </p>
+                    <button className="text-white focus:outline-none focus:ring-4 mt-4 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 bg-black bg-opacity-30 w-40">
+                        Add New
+                    </button>
+                </div>
+                <div className="grid grid-cols-4 gap-4 mt-10">
                 { mediaEntryData.length > 0 ? (
                     mediaEntryData.map((mediaItem) => (
                         <MediaEntryCard key={mediaItem.id} mediaItem={mediaItem} />
@@ -92,8 +115,9 @@ export default function MediaEntryPageComponent(props) {
                     <p>No {props.category}s found.</p>
                 )}
                 </div>
+            </div>
 
-                <form onSubmit={handleMediaEntrySubmit}
+                {/* <form onSubmit={handleMediaEntrySubmit}
                     className="bg-n-black"
                 >
                     <div>
@@ -105,8 +129,8 @@ export default function MediaEntryPageComponent(props) {
                         <input type="text" id="imageUrl" name="imageUrl" value={formData.imageUrl} onChange={handleChange} required />
                     </div>
                     <button type="submit">Add Media Entry</button>
-                </form>
-        
+                </form> */}
+            <Footer />
         </div>
     );
 }
