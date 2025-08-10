@@ -3,6 +3,7 @@ import MediaEntryCard from "./MediaEntryCard";
 import Header from "./Header"
 import Footer from "./Footer";
 
+
 export default function MediaEntryPageComponent(props) {
     const categoryBasedMessage = {
         "movie": "watched",
@@ -83,6 +84,29 @@ export default function MediaEntryPageComponent(props) {
 
     };
 
+    const [searchResults, setSearchResults] = useState([]);
+
+    async function searchMovies(query) {
+        const apiKey = import.meta.env.VITE_MOVIE_API_KEY;
+        const options = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${apiKey}`
+        }
+        };
+
+        try {
+            const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=Avatar`, options);
+            const data = await response.json();
+            console.log(data);
+            setSearchResults(data.results);
+        } catch (error) {
+            console.error(error);
+        }
+
+        
+    }
 
     useEffect(() => {
         loadEntryData();
@@ -131,6 +155,22 @@ export default function MediaEntryPageComponent(props) {
                     <button type="submit">Add Media Entry</button>
                 </form> */}
             <Footer />
+            <button className="w-20 h-20 bg-secondary-color rounded-full fixed bottom-10 right-10"
+            onClick={searchMovies}>It won't work for sure</button>
+
+            <div className="search-results bg-black">
+                {searchResults.length > 0 && (
+                <div>
+                    <h2>Search Results:</h2>
+                    <ul>
+                    {searchResults.map((movie) => (
+                        <li key={movie.id}>{movie.title}</li>
+                    ))}
+                    </ul>
+                </div>
+                )}
+            </div>
+            
         </div>
     );
 }
