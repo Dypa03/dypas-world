@@ -11,7 +11,8 @@ import com.dypaworld.model.entity.User;
 @Getter
 @Setter
 public class MediaEntryDTO {
-    private Integer id;
+    private Long id;
+    private Long apiMediaRecordId;
     private String title;
     private String category;
     private int rating;

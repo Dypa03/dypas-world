@@ -11,11 +11,9 @@ public interface MediaEntryService {
 
     MediaEntry updateMediaEntry(MediaEntryDTO mediaEntryDTO);
 
-    boolean deleteMediaEntry(Integer entryId);
+    boolean deleteMediaEntry(Long entryId);
 
-    MediaEntry getMediaEntryById(Integer entryId);
+    MediaEntry getMediaEntryById(Long entryId);
 
-    List<MediaEntry> getAllMediaEntriesByUserAndCategory(User user, String category);
 
-    List<MediaEntry> getAllMediaEntriesByUser(User user);
 }

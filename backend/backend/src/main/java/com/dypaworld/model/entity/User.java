@@ -3,6 +3,7 @@ package com.dypaworld.model.entity;
 import java.security.AuthProvider;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
@@ -31,7 +32,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", unique = true, nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(unique = true)
     private String name;
@@ -45,10 +46,10 @@ public class User {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    // OneToMany relationship with MediaEntry
     @OneToMany(mappedBy = "user")
     @JsonIgnore
-    private List<MediaEntry> mediaEntries;
+    private Set<UserMediaEntry> userMediaEntries;
+
 
     // Additional constructor for user registration
     public User(String name, String email, String password) {

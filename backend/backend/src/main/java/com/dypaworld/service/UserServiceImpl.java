@@ -74,13 +74,13 @@ public class UserServiceImpl implements UserService {
 
     // deleteUser method to remove a user from the system
     @Override
-    public boolean deleteUser(Integer userId) {
+    public boolean deleteUser(Long userId) {
         // TODO: Implement the logic to delete a user by ID
         return false;
     }
 
     @Override
-    public User getUserById(Integer userId) {
+    public User getUserById(Long userId) {
         if (userId == null || userId <= 0) {
             throw new IllegalArgumentException("User ID must be a positive integer");
         }

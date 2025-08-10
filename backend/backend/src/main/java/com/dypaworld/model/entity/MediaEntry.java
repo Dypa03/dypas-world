@@ -1,16 +1,10 @@
 package com.dypaworld.model.entity;
 import java.time.LocalDateTime;
+import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Entity;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -29,11 +23,10 @@ public class MediaEntry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "media_entry_id", unique = true, nullable = false)
-    private Integer id;
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "api_media_record_id")
+    private Long apiMediaRecordId;
 
     @Column(nullable = false)
     private String title;
@@ -41,20 +34,16 @@ public class MediaEntry {
     @Column(nullable = false)
     private String category;
 
-    private int rating;
-
     private String imageUrl;
 
-    @CreationTimestamp
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @OneToMany(mappedBy = "mediaEntry")
+    @JsonIgnore
+    private Set<UserMediaEntry> userMediaEntries;
 
     // Additional constructor for media entry creation
-    public MediaEntry(User user, String title, String category, int rating, String imageUrl) {
-        this.user = user;
+    public MediaEntry(String title, String category, String imageUrl) {
         this.title = title;
         this.category = category;
-        this.rating = rating;
         this.imageUrl = imageUrl;
     }
 }

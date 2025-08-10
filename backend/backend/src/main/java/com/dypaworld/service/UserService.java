@@ -11,7 +11,7 @@ public interface UserService {
 
     User updateUserDetails(UserDTO userDTO);
 
-    boolean deleteUser(Integer userId);
+    boolean deleteUser(Long userId);
 
-    User getUserById(Integer userId);
+    User getUserById(Long userId);
 }

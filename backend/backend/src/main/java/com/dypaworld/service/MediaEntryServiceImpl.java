@@ -2,6 +2,9 @@ package com.dypaworld.service;
 
 import java.util.List;
 
+import com.dypaworld.model.entity.UserMediaEntry;
+import com.dypaworld.model.entity.UserMediaEntryKey;
+import com.dypaworld.repository.UserMediaEntryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dypaworld.model.entity.MediaEntry;
@@ -19,6 +22,9 @@ public class MediaEntryServiceImpl implements MediaEntryService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserMediaEntryRepository userMediaEntryRepository;
+
     @Override
     public MediaEntry addMediaEntry(MediaEntryDTO mediaEntryDTO, User user) {
         if (mediaEntryDTO == null || mediaEntryDTO.getCategory() == null || mediaEntryDTO.getTitle() == null) {
@@ -30,13 +36,21 @@ public class MediaEntryServiceImpl implements MediaEntryService {
         }
 
         MediaEntry mediaEntry = new MediaEntry();
+        mediaEntry.setApiMediaRecordId(mediaEntryDTO.getApiMediaRecordId());
         mediaEntry.setCategory(mediaEntryDTO.getCategory());
         mediaEntry.setTitle(mediaEntryDTO.getTitle());
         mediaEntry.setImageUrl(mediaEntryDTO.getImageUrl());
 
-        mediaEntry.setUser(user);
+        mediaEntry = mediaEntryRepository.save(mediaEntry);
 
-        return mediaEntryRepository.save(mediaEntry);
+        UserMediaEntry userMediaEntry  = new UserMediaEntry();
+        userMediaEntry.setUser(user);
+        userMediaEntry.setMediaEntry(mediaEntry);
+        userMediaEntry.setRating(mediaEntryDTO.getRating());
+
+        userMediaEntryRepository.save(userMediaEntry);
+
+        return mediaEntry;
     };
 
     @Override
@@ -50,14 +64,13 @@ public class MediaEntryServiceImpl implements MediaEntryService {
 
         existingMediaEntry.setCategory(mediaEntryDTO.getCategory());
         existingMediaEntry.setTitle(mediaEntryDTO.getTitle());
-        existingMediaEntry.setRating(mediaEntryDTO.getRating());
         existingMediaEntry.setImageUrl(mediaEntryDTO.getImageUrl());
 
         return mediaEntryRepository.save(existingMediaEntry);
     };
 
     @Override
-    public boolean deleteMediaEntry(Integer entryId) {
+    public boolean deleteMediaEntry(Long entryId) {
         if (entryId <= 0) {;
             throw new IllegalArgumentException("Entry ID must be a positive integer");
         }
@@ -71,7 +84,7 @@ public class MediaEntryServiceImpl implements MediaEntryService {
     };
 
     @Override
-    public MediaEntry getMediaEntryById(Integer entryId) {
+    public MediaEntry getMediaEntryById(Long entryId) {
         if (entryId == null || entryId <= 0) {
             throw new IllegalArgumentException("Entry ID must be a positive integer");
         }
@@ -80,7 +93,7 @@ public class MediaEntryServiceImpl implements MediaEntryService {
                 .orElseThrow(() -> new IllegalArgumentException("Media entry with ID " + entryId + " does not exist"));
     };
 
-    @Override
+    /*@Override
     public List<MediaEntry> getAllMediaEntriesByUserAndCategory(User user, String category) {
         if (user == null || user.getId() == null) {
             throw new IllegalArgumentException("User is not authenticated or does not exist");
@@ -99,6 +112,6 @@ public class MediaEntryServiceImpl implements MediaEntryService {
         }
 
         return mediaEntryRepository.findMediaEntriesByUserId(user.getId());
-    }
+    }*/
 
 }
