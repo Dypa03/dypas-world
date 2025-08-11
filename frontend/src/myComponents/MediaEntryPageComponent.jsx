@@ -5,37 +5,34 @@ import Footer from "./Footer";
 
 
 export default function MediaEntryPageComponent(props) {
-    const categoryBasedMessage = {
-        "movie": "watched",
-        "tv-show": "watched",
-        "anime": "watched",
-        "game": "played",
-        "album": "listened to",
-        "book": "read",
-        "comic": "read",
-        "manga": "read",
-    }
+
+    props = props.category
 
     const [mediaEntryData, setMediaEntryData] = useState([]);
 
-    const [formData, setFormData] = useState({
+    const [searchFormData, setSearchFormData] = useState({
         title: '',
         imageUrl: '',
-        category: props.category,
+        category: props.categoryName,
     });
 
-    const handleChange = (e) => {
-        setFormData(prevFormData => ({
+    const handleFormDataChange = (e) => {
+        setSearchFormData(prevFormData => ({
             ...prevFormData,
             [e.target.name]: e.target.value
         }));
+    };
+
+    const handleFormDataSubmit = (e) => {
+        e.preventDefault();
+        fetchMediaEntries(searchFormData.title);
     };
 
     const loadEntryData = async () => {
         try {
             
 
-            const response = await fetch(`http://localhost:8080/api/media-entry/get-all-by-category-user?category=${props.category.toLowerCase()}`, {
+            const response = await fetch(`http://localhost:8080/api/media-entry/get-all-by-category-user?category=${props.categoryName.toLowerCase()}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -57,9 +54,7 @@ export default function MediaEntryPageComponent(props) {
         }
     }
 
-    const handleMediaEntrySubmit = async (e) => {
-        e.preventDefault();
-
+    const handleMediaEntrySubmit = async (mediaEntryData) => {
         try {
             const response = await fetch("http://localhost:8080/api/media-entry/add", {
                 method: "POST",
@@ -68,7 +63,7 @@ export default function MediaEntryPageComponent(props) {
                     "Access-Control-Allow-Origin": "*"
                 },
                 credentials: "include",
-                body: JSON.stringify(formData)
+                body: JSON.stringify(mediaEntryData)                
             });
 
             if (response.ok) {
@@ -76,6 +71,7 @@ export default function MediaEntryPageComponent(props) {
             } else {
                 const errorData = await response.json()
                 alert(`Error: ${errorData.message || "Failed to load media entry"}`);
+                console.log(mediaEntryData)
             }
         } catch (error) {
             console.error("Error during registration:", error);
@@ -86,18 +82,18 @@ export default function MediaEntryPageComponent(props) {
 
     const [searchResults, setSearchResults] = useState([]);
 
-    async function searchMovies(query) {
-        const apiKey = import.meta.env.VITE_MOVIE_API_KEY;
+    async function fetchMediaEntries(query) {
+        
         const options = {
         method: 'GET',
         headers: {
             accept: 'application/json',
-            Authorization: `Bearer ${apiKey}`
+            Authorization: `Bearer ${props.apiKey}`
         }
         };
 
         try {
-            const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=Avatar`, options);
+            const response = await fetch(`${props.querySearchPrefix}${query}`, options);
             const data = await response.json();
             console.log(data);
             setSearchResults(data.results);
@@ -113,7 +109,19 @@ export default function MediaEntryPageComponent(props) {
     }, []);
 
 
-
+    const searchMediaEntryForm = 
+        <form onSubmit={handleFormDataSubmit}
+            className="bg-n-black p-4 rounded-lg shadow-md flex gap-4 justify-center items-center"
+        >
+            <div>
+                <label htmlFor="title">Title:</label>
+                <input
+                className="border border-gray-300 rounded-lg p-2 text-n-black" 
+                type="text" id="title" name="title" value={searchFormData.title} onChange={handleFormDataChange} required />
+            </div>
+            
+            <button type="submit">Search</button>
+        </form>
 
     return (
         <div className="">
@@ -121,10 +129,10 @@ export default function MediaEntryPageComponent(props) {
             <div className="bg-main-color h-auto py-20 px-80">
                 <div className="welcome-message flex flex-col items-center mt-16">
                     <h1 className="text-6xl font-bold first-letter:uppercase">
-                        {props.category}s
+                        {props.categoryName}s
                     </h1>
                     <p className="text-1xl">
-                        You have {categoryBasedMessage[props.category]}: {mediaEntryData.length}
+                        You have {props.categoryBasedMessage}: {mediaEntryData.length}
                     </p>
                     <button className="text-white focus:outline-none focus:ring-4 mt-4 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 bg-black bg-opacity-30 w-40">
                         Add New
@@ -136,37 +144,38 @@ export default function MediaEntryPageComponent(props) {
                         <MediaEntryCard key={mediaItem.id} mediaItem={mediaItem} />
                     ))
                 ) : (
-                    <p>No {props.category}s found.</p>
+                    <p>No {props.categoryName}s found.</p>
                 )}
                 </div>
             </div>
 
-                {/* <form onSubmit={handleMediaEntrySubmit}
-                    className="bg-n-black"
-                >
-                    <div>
-                        <label htmlFor="title">Title:</label>
-                        <input type="text" id="title" name="title" value={formData.title} onChange={handleChange} required />
-                    </div>
-                    <div>
-                        <label htmlFor="imageUrl">Image:</label>
-                        <input type="text" id="imageUrl" name="imageUrl" value={formData.imageUrl} onChange={handleChange} required />
-                    </div>
-                    <button type="submit">Add Media Entry</button>
-                </form> */}
+                {searchMediaEntryForm}
             <Footer />
             <button className="w-20 h-20 bg-secondary-color rounded-full fixed bottom-10 right-10"
-            onClick={searchMovies}>It won't work for sure</button>
+            onClick={fetchMediaEntries}>It won't work for sure</button>
 
             <div className="search-results bg-black">
                 {searchResults.length > 0 && (
                 <div>
                     <h2>Search Results:</h2>
-                    <ul>
-                    {searchResults.map((movie) => (
-                        <li key={movie.id}>{movie.title}</li>
-                    ))}
-                    </ul>
+                    <div className="grid grid-cols-4 gap-4">
+                        {searchResults.map((mediaItem) => (
+                            <div key={mediaItem.id}
+                                className="rounded-3xl max-w-[270px] shadow-sm text-slate-900 "
+                                onClick={() => 
+                                    handleMediaEntrySubmit({
+                                        apiMediaRecordId: mediaItem.id,
+                                        category: props.categoryName,
+                                        title: mediaItem.title,
+                                        imageUrl: `${props.posterImagePrefix}${mediaItem.poster_path}`,
+                                    })}
+                                >
+                                <img src={`${props.posterImagePrefix}${mediaItem.poster_path}`} 
+                                    className="rounded-3xl justify-center h-66 grid object-cover w-full hover:scale-105 transition-transform duration-300"
+                                    alt="" />
+                            </div>
+                        ))}
+                    </div>
                 </div>
                 )}
             </div>

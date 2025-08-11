@@ -5,15 +5,16 @@ import Register from './pages/Register'
 import './App.css'
 import MediaEntryPageComponent from './myComponents/MediaEntryPageComponent'
 import Header from './myComponents/Header'
+import { categoriesData } from './assets/data/categoriesData'
 
 
 function App() {
-  const categoryList = ["movie", "tv-show", "anime", "game", "album", "book", "comic", "manga"]
+  
 
-  const categoryRoutes = categoryList.map((category) => (
+  const categoryRoutes = categoriesData.map((category) => (
     <Route
-      key={category}
-      path={`/${category}s`}
+      key={category.categoryName}
+      path={`/${category.categoryName}s`}
       element={<MediaEntryPageComponent category={category} />}
     />
   ))
@@ -25,8 +26,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         {categoryRoutes}
-        
-        
       </Routes>
     </Router>
   )

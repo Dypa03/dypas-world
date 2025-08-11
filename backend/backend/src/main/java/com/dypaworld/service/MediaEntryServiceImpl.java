@@ -35,6 +35,8 @@ public class MediaEntryServiceImpl implements MediaEntryService {
             throw new IllegalArgumentException("User is not authenticated or does not exist");
         }
 
+        System.out.println("Adding media entry for user: " + user.getId());
+
         MediaEntry mediaEntry = new MediaEntry();
         mediaEntry.setApiMediaRecordId(mediaEntryDTO.getApiMediaRecordId());
         mediaEntry.setCategory(mediaEntryDTO.getCategory());
@@ -43,10 +45,10 @@ public class MediaEntryServiceImpl implements MediaEntryService {
 
         mediaEntry = mediaEntryRepository.save(mediaEntry);
 
-        UserMediaEntry userMediaEntry  = new UserMediaEntry();
+
+        UserMediaEntry userMediaEntry = new UserMediaEntry();
         userMediaEntry.setUser(user);
         userMediaEntry.setMediaEntry(mediaEntry);
-        userMediaEntry.setRating(mediaEntryDTO.getRating());
 
         userMediaEntryRepository.save(userMediaEntry);
 
