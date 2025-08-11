@@ -5,7 +5,7 @@ import Register from './pages/Register'
 import './App.css'
 import MediaEntryPageComponent from './myComponents/MediaEntryPageComponent'
 import Header from './myComponents/Header'
-import { categoriesData } from './assets/data/categoriesData'
+import { categoriesData } from './data/categoriesData'
 
 
 function App() {

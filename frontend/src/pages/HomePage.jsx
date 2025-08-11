@@ -3,38 +3,21 @@ import Header from "../myComponents/Header"
 import Footer from "../myComponents/Footer"
 import mainImage from '../assets/main-image.png'
 
-
-import moviesImage from  '../assets/categories/movies2.jpg'
-import tvShowsImage from '../assets/categories/tv-shows.jpg'
-import gamesImage from '../assets/categories/games.jpeg'
-import animeImage from '../assets/categories/animes.jpg'
-import mangaImage from '../assets/categories/mangas.jpg'
-import comicsImage from '../assets/categories/comics.jpg'
-import booksImage from '../assets/categories/books.jpg'
-import albumsImage from '../assets/categories/albums.jpg'
+import { categoriesData } from '../data/categoriesData'
 
 
 export default function HomePage() {
-  let categoriesData = [
-    { name: "Movies", image:  moviesImage, pageLink: "movies" },
-    { name: "TV Shows", image: tvShowsImage, pageLink: "tv-shows" },
-    { name: "Games", image: gamesImage, pageLink: "games" },
-    { name: "Anime", image: animeImage, pageLink: "anime" },
-    { name: "Manga", image: mangaImage, pageLink: "manga" },
-    { name: "Comics", image: comicsImage, pageLink: "comics" },
-    { name: "Books", image: booksImage, pageLink: "books" },
-    { name: "Music Albums", image: albumsImage, pageLink: "music-albums" }
-  ]
+
 
   const categoriesCards = categoriesData.map((category, index) => {
     return (
       <div key={index} className="category-card hover:scale-105 transition-transform duration-300">
         <a href={`/${category.pageLink.toLowerCase()}`}>
-          <img src={category.image} alt={category.name} 
+          <img src={category.categoryCoverImage} alt={category.categoryName} 
           className="w-card h-card object-cover rounded-xl shadow-lg "
         />
         <h4 className="text-3xl font-bold text-center mt-5 hover:text-secondary-color hover:underline">
-          {category.name}</h4>
+          {category.categoryTitle}</h4>
         </a>
         
       </div>

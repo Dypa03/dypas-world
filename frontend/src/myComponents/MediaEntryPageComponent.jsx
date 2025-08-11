@@ -16,6 +16,8 @@ export default function MediaEntryPageComponent(props) {
         category: props.categoryName,
     });
 
+        
+
     const handleFormDataChange = (e) => {
         setSearchFormData(prevFormData => ({
             ...prevFormData,

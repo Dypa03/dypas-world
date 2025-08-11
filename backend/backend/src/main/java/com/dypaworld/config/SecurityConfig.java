@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/error").permitAll()
+                                //.requestMatchers("/error").permitAll()
                                 .anyRequest().authenticated())
                 .oauth2Login(oauth2 ->
                         oauth2
@@ -65,11 +65,11 @@ public class SecurityConfig {
         UserDetails admin = User.withUsername("admin").password("$2a$12$qzv/7/LEPqbA4ryXSh6f2eInJ0Uoo40EO0DqcJ9uV5afHymg2d3UC").authorities("admin").build();
         return new InMemoryUserDetailsManager(user, admin);
     }*/
-
+/*
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
+    }*/
 
     /*
     @Bean
