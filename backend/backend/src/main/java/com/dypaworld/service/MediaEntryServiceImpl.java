@@ -1,7 +1,10 @@
 package com.dypaworld.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import com.dypaworld.model.dto.UserMediaEntryDTO;
 import com.dypaworld.model.entity.UserMediaEntry;
 import com.dypaworld.model.entity.UserMediaEntryKey;
 import com.dypaworld.repository.UserMediaEntryRepository;
@@ -36,17 +39,25 @@ public class MediaEntryServiceImpl implements MediaEntryService {
         }
 
         System.out.println("Adding media entry for user: " + user.getId());
+        System.out.println(mediaEntryDTO);
 
         MediaEntry mediaEntry = new MediaEntry();
-        mediaEntry.setApiMediaRecordId(mediaEntryDTO.getApiMediaRecordId());
-        mediaEntry.setCategory(mediaEntryDTO.getCategory());
-        mediaEntry.setTitle(mediaEntryDTO.getTitle());
-        mediaEntry.setImageUrl(mediaEntryDTO.getImageUrl());
 
-        mediaEntry = mediaEntryRepository.save(mediaEntry);
+        Optional<MediaEntry> existingMediaEntry = mediaEntryRepository.findByApiMediaRecordIdAndCategory(mediaEntryDTO.getApiMediaRecordId(), mediaEntryDTO.getCategory());
+        if (existingMediaEntry.isEmpty()) {
+            mediaEntry.setApiMediaRecordId(mediaEntryDTO.getApiMediaRecordId());
+            mediaEntry.setCategory(mediaEntryDTO.getCategory());
+            mediaEntry.setTitle(mediaEntryDTO.getTitle());
+            mediaEntry.setImageUrl(mediaEntryDTO.getImageUrl());
+            mediaEntry = mediaEntryRepository.save(mediaEntry);
+        } else {
+            mediaEntry = existingMediaEntry.get();
+        }
 
+        UserMediaEntryKey userMediaEntryKey = new UserMediaEntryKey(user.getId(), mediaEntry.getId());
 
         UserMediaEntry userMediaEntry = new UserMediaEntry();
+        userMediaEntry.setId(userMediaEntryKey);
         userMediaEntry.setUser(user);
         userMediaEntry.setMediaEntry(mediaEntry);
 
@@ -95,25 +106,32 @@ public class MediaEntryServiceImpl implements MediaEntryService {
                 .orElseThrow(() -> new IllegalArgumentException("Media entry with ID " + entryId + " does not exist"));
     };
 
-    /*@Override
-    public List<MediaEntry> getAllMediaEntriesByUserAndCategory(User user, String category) {
-        if (user == null || user.getId() == null) {
-            throw new IllegalArgumentException("User is not authenticated or does not exist");
-        }
-        if (category == null || category.isEmpty()) {
-            throw new IllegalArgumentException("Category cannot be null or empty");
-        }
-
-        return mediaEntryRepository.findMediaEntriesByUserAndCategory(user, category);
-    };
-
     @Override
-    public List<MediaEntry> getAllMediaEntriesByUser(User user) {
+    public List<UserMediaEntryDTO> getAllMediaEntriesByUserAndCategory(User user, String category) {
         if (user == null || user.getId() == null) {
             throw new IllegalArgumentException("User is not authenticated or does not exist");
         }
+        if (category == null) {
+            throw new IllegalArgumentException("Category cannot be null");
+        }
 
-        return mediaEntryRepository.findMediaEntriesByUserId(user.getId());
-    }*/
+        List<UserMediaEntry> allUserMediaEntries = userMediaEntryRepository.findByUserId(user.getId());
 
+        List<UserMediaEntryDTO> userMediaEntriesByCategory = new ArrayList<>();
+
+        for (UserMediaEntry userMediaEntry : allUserMediaEntries) {
+            if (userMediaEntry.getMediaEntry().getCategory().equals(category)) {
+
+                UserMediaEntryDTO userMediaEntryDTO = new UserMediaEntryDTO();
+                userMediaEntryDTO.setMediaEntryId(userMediaEntry.getId().getMediaEntryId());
+                userMediaEntryDTO.setTitle(userMediaEntry.getMediaEntry().getTitle());
+                userMediaEntryDTO.setImageUrl(userMediaEntry.getMediaEntry().getImageUrl());
+                userMediaEntryDTO.setRating(userMediaEntry.getRating());
+
+                userMediaEntriesByCategory.add(userMediaEntryDTO);
+            }
+        }
+
+        return userMediaEntriesByCategory;
+    }
 }

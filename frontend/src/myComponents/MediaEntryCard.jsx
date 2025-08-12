@@ -19,7 +19,6 @@ export default function MediaEntryCard({ mediaItem }) {
                     </h2>
                     <span className="text-slate-400 pt-2 font-semibold">
                     
-            ({mediaItem.createdAt.split("T")[0]})
                     </span>
                     
                     <div className=" grid-cols-2 flex group justify-between">

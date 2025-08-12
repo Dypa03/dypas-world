@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 
+import com.dypaworld.model.dto.UserMediaEntryDTO;
 import com.dypaworld.model.entity.User;
 import com.dypaworld.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +35,11 @@ public class MediaEntryController {
     }
 
     @GetMapping(path = "/get-all-by-category-user")
-    public List<MediaEntry> getMediaEntryByUserAndCategory(@RequestParam("category") String category,
-                                                             @AuthenticationPrincipal OAuth2User principal) {
+    public List<UserMediaEntryDTO> getMediaEntryByUserAndCategory(@RequestParam("category") String category,
+                                                                  @AuthenticationPrincipal OAuth2User principal) {
         String email = principal.getAttribute("email");
         Optional<User> user = userRepository.findByEmail(email);
-        return null;
+        return mediaEntryService.getAllMediaEntriesByUserAndCategory(user.orElse(null), category);
     }
 
     @GetMapping(path = "/get-all-by-user")

@@ -1,15 +1,13 @@
 package com.dypaworld.model.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import com.dypaworld.model.entity.User;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class MediaEntryDTO {
     private Long id;
     private Long apiMediaRecordId;
@@ -20,7 +18,8 @@ public class MediaEntryDTO {
     private String createdAt;
 
     // Constructor for media entry creation
-    public MediaEntryDTO(String title, String category, String imageUrl) {
+    public MediaEntryDTO(String title, String category, String imageUrl, Long apiMediaRecordId) {
+        this.apiMediaRecordId = apiMediaRecordId;
         this.title = title;
         this.category = category;
         this.imageUrl = imageUrl;

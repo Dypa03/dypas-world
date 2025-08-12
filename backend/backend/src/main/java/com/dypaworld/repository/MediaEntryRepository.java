@@ -14,6 +14,6 @@ public interface MediaEntryRepository extends JpaRepository<MediaEntry, Long> {
     // TODO: check if there are any custom query methods needed
     // For now, JpaRepository provides basic CRUD operations
     Optional<MediaEntry> findByApiMediaRecordId(Long apiMediaRecordId);
-
+    Optional<MediaEntry> findByApiMediaRecordIdAndCategory(Long apiMediaRecordId, String category);
 
 }

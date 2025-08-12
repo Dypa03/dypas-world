@@ -1,6 +1,7 @@
 package com.dypaworld.service;
 
 import com.dypaworld.model.dto.MediaEntryDTO;
+import com.dypaworld.model.dto.UserMediaEntryDTO;
 import com.dypaworld.model.entity.MediaEntry;
 import com.dypaworld.model.entity.User;
 
@@ -14,6 +15,8 @@ public interface MediaEntryService {
     boolean deleteMediaEntry(Long entryId);
 
     MediaEntry getMediaEntryById(Long entryId);
+
+    List<UserMediaEntryDTO> getAllMediaEntriesByUserAndCategory(User user, String category);
 
 
 }
