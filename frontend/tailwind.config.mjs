@@ -68,6 +68,9 @@ module.exports = {
       },
       width: {
         'card': '350px'
+      },
+      top: {
+        'header': '76px'
       }
     },
   },

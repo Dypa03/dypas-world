@@ -9,7 +9,7 @@ export default function Header() {
     const navigate = useNavigate();
 
     return (
-        <header className='bg-n-white w-full h-header flex items-center justify-between px-56 absolute top-0 left-0 z-50 '>
+        <header className='bg-n-white w-full h-header flex items-center justify-between px-56 absolute top-0 left-0 z-40 '>
 
                 <div className='logo-container flex items-center text-t-logo font-bold '>
                     <img src={logo} alt='Wizard Logo' 

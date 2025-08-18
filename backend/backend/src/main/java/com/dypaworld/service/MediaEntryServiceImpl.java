@@ -49,6 +49,7 @@ public class MediaEntryServiceImpl implements MediaEntryService {
             mediaEntry.setCategory(mediaEntryDTO.getCategory());
             mediaEntry.setTitle(mediaEntryDTO.getTitle());
             mediaEntry.setImageUrl(mediaEntryDTO.getImageUrl());
+            
             mediaEntry = mediaEntryRepository.save(mediaEntry);
         } else {
             mediaEntry = existingMediaEntry.get();
