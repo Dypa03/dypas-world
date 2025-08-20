@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import MediaEntryCard from "./MediaEntryCard";
 import Header from "./Header"
 import Footer from "./Footer";
+ 
+
 
 
 export default function MediaEntryPageComponent(props) {
@@ -17,6 +19,7 @@ export default function MediaEntryPageComponent(props) {
     const [searchFormMode, setSearchFormMode] = useState('search');
         
     const [newMediaEntryData, setNewMediaEntryData] = useState({
+        apiMediaRecordId: 0,
         title: '',
         category: '',
         imageUrl: '',
@@ -28,9 +31,16 @@ export default function MediaEntryPageComponent(props) {
         setSearchFormData(e.target.value);
     };
 
+    const handleNewMediaEntryRatingChange = (e) => {
+        setNewMediaEntryData(prevFormData => ({
+            ...prevFormData,
+            rating: e.target.value
+        }));
+    };
+
     const handleSearchFormDataSubmit = (e) => {
         e.preventDefault();
-        fetchMediaEntries(searchFormData);
+        fetchMediaEntriesFromApi(searchFormData);
         setSearchFormData('');
     };
 
@@ -41,7 +51,9 @@ export default function MediaEntryPageComponent(props) {
         }));
     };
 
-    const loadEntryData = async () => {
+    
+
+    const loadUserEntryDataList = async () => {
         try {
             
 
@@ -67,7 +79,7 @@ export default function MediaEntryPageComponent(props) {
         }
     }
 
-    const handleMediaEntrySubmit = async (newMediaEntryData) => {
+    const handleNewMediaEntrySubmit = async () => {
         try {
             const response = await fetch("http://localhost:8080/api/media-entry/add", {
                 method: "POST",
@@ -80,13 +92,16 @@ export default function MediaEntryPageComponent(props) {
             });
 
             if (response.ok) {
-                alert("added successful!")
                 setNewMediaEntryData({
+                    apiMediaRecordId: 0,
                     title: '',
                     category: '',
                     imageUrl: '',
                     rating: 0
                 })
+                setIsSearchFormShown(false);
+                setSearchFormMode('search');
+                loadUserEntryDataList();
             } else {
                 const errorData = await response.json()
                 alert(`Error: ${errorData.message || "Failed to load media entry"}`);
@@ -101,7 +116,14 @@ export default function MediaEntryPageComponent(props) {
 
     const [searchResults, setSearchResults] = useState([]);
 
-    async function fetchMediaEntries(query) {
+/*************  ✨ Windsurf Command ⭐  *************/
+    /**
+     * Fetches media entries from the API, given a search query.
+     * @param {string} query - The search query to use for the API request.
+     * @returns {Promise<void>}
+     */
+/*******  25a928a8-adc2-4941-85e2-c4dde3a5262d  *******/
+    async function fetchMediaEntriesFromApi(query) {
         
         const options = {
         method: 'GET',
@@ -126,8 +148,12 @@ export default function MediaEntryPageComponent(props) {
     
 
     useEffect(() => {
-        loadEntryData();
+        loadUserEntryDataList();
     }, []);
+
+    useEffect(() => {
+        console.log(newMediaEntryData)
+    }, [newMediaEntryData])
 
 
     const searchResultList = 
@@ -137,24 +163,26 @@ export default function MediaEntryPageComponent(props) {
                     
                     <div className="h-[500px] grid grid-cols-4 gap-4 overflow-scroll overflow-x-auto rounded-3xl">
                         {searchResults.map((searchEntryItem) => (
+                            console.log(searchEntryItem),
                             searchEntryItem.poster_path == null ? null :
 
                             <div key={searchEntryItem.id}
                                 className="rounded-3xl max-w-[270px] shadow-sm text-slate-900"
+
+                                
+
                                 onClick={() => {handleNewMediaEntryDataChange({
                                     ...newMediaEntryData,
+                                    apiMediaRecordId: searchEntryItem.id,
                                     title: searchEntryItem.title,
                                     category: props.categoryName,
-                                    imageUrl: searchEntryItem.poster_path[0] == "/" ? `${props.posterImagePrefix}${searchEntryItem.poster_path}` : `${props.posterImagePrefix}/${searchEntryItem.poster_path}`
+                                    imageUrl: `${props.posterImagePrefix}${searchEntryItem.poster_path}`
                                 })
-                                console.log(newMediaEntryData.imageUrl)
-                                setIsSearchFormShown(false);
                                 setSearchFormMode('add');}
                                 }
                                 >
                                 <img src=
-                                        {searchEntryItem.poster_path[0] == "/" ? `${props.posterImagePrefix}${searchEntryItem.poster_path}` :
-                                        `${props.posterImagePrefix}/${searchEntryItem.poster_path}`}
+                                        {`${props.posterImagePrefix}${searchEntryItem.poster_path}`}
                                     
                                     className="rounded-3xl justify-center h-[270px] object-cover w-full hover:scale-105 transition-transform duration-300"
                                     alt="" />
@@ -172,7 +200,7 @@ export default function MediaEntryPageComponent(props) {
             
             <label className="text-lg font-bold"
                 htmlFor="title">Insert a {props.categoryName} title:</label>
-            <div class="bg-white flex px-1 py-1 rounded-full border border-blue-500 overflow-hidden max-w-md mx-auto">
+            <div className="bg-white flex px-1 py-1 rounded-full border border-blue-500 overflow-hidden max-w-md mx-auto">
                 <input
                 className="w-full outline-none bg-white pl-4 text-sm text-n-black" 
                 placeholder='Search Something...'
@@ -185,28 +213,40 @@ export default function MediaEntryPageComponent(props) {
             </div>
         </form>
 
+    
+
+
     const newMediaEntryForm = 
-        <form onSubmit={() => handleMediaEntrySubmit(newMediaEntryData)}
-            className=" p-2 rounded-lg flex flex-col gap-4 justify-center items-center"
+        <form onSubmit={(e) => {
+            e.preventDefault();
+            handleNewMediaEntrySubmit();
+        }}
+            className=" p-6 rounded-lg flex flex-col gap-3 justify-center items-center"
         >
-            <div>
+            
+                
                 <img 
-                    className="rounded-3xl justify-center h-[270px] object-cover w-full"
-                    src={newMediaEntryData.poster_path} alt="" />
-                <h2>{newMediaEntryData.title}</h2>
-                <label htmlFor="rating"></label>
-                <span>
-                    Your Rating:
-                    <input type="text" id="rating" name="rating" value={newMediaEntryData.rating} onChange={handleNewMediaEntryDataChange} /> / 10 
-                    <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    className="rounded-3xl h-[360px] object-cover w-full"
+                    src={newMediaEntryData.imageUrl} alt="" />
+                <h2 className="text-3xl font-bold">{newMediaEntryData.title}</h2>
+                <label htmlFor="rating" className="text-xl font-bold mt-4">Insert your Rating:</label>
+                
+                <span className="flex items-center gap-1 mt text-xl">
+                    
+                    <input type="text" id="rating" name="rating" value={newMediaEntryData.rating} onChange={handleNewMediaEntryRatingChange} 
+                    className="w-[45px] h-[40px] outline-none bg-black bg-opacity-40 rounded-md pl-4 "/> 
+                    <p>/ 10</p> 
+                    <svg className="inline"
+                     width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="SVGRepo_bgCarrier" stroke-width="0"/>
-                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" />
                         <g id="SVGRepo_iconCarrier"> <path d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z" fill="#eab308"/> </g>
                     </svg>
                 </span>
                 
-                <button>Submit</button>
-            </div>    
+                <button className="w-1/2 bg-main-color hover:bg-secondary-color text-white font-bold py-2 px-4 rounded-3xl focus:outline-none focus:shadow-outline mt-2"
+                >Submit</button>
+              
             
         </form>
 

@@ -14,7 +14,7 @@ export const categoriesData = [
         "categoryCoverImage": moviesImage,
         "pageLink": "movies",
         "categoryBasedMessage": "watched",
-        "posterImagePrefix": "https://image.tmdb.org/t/p/w500/",
+        "posterImagePrefix": "https://image.tmdb.org/t/p/w500",
         "querySearchPrefix": "https://api.themoviedb.org/3/search/movie?query=",
         "apiKey": import.meta.env.VITE_MOVIE_API_KEY
     },

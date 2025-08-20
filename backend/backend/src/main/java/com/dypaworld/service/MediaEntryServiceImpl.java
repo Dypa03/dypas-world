@@ -61,6 +61,7 @@ public class MediaEntryServiceImpl implements MediaEntryService {
         userMediaEntry.setId(userMediaEntryKey);
         userMediaEntry.setUser(user);
         userMediaEntry.setMediaEntry(mediaEntry);
+        userMediaEntry.setRating(mediaEntryDTO.getRating());
 
         userMediaEntryRepository.save(userMediaEntry);
 

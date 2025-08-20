@@ -18,10 +18,11 @@ public class MediaEntryDTO {
     private String createdAt;
 
     // Constructor for media entry creation
-    public MediaEntryDTO(String title, String category, String imageUrl, Long apiMediaRecordId) {
+    public MediaEntryDTO(String title, String category, String imageUrl, Long apiMediaRecordId, int rating) {
         this.apiMediaRecordId = apiMediaRecordId;
         this.title = title;
         this.category = category;
         this.imageUrl = imageUrl;
+        this.rating = rating;
     }
 }
