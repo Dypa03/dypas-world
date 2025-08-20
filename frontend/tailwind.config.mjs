@@ -58,7 +58,8 @@ module.exports = {
       },
       fontSize: {
         't-logo': '31px',
-        'intro-font-size': '22px'
+        'intro-font-size': '22px',
+        'card-title': '1.3rem'
       },
       height: {
         'section': 'calc(100vh - 230px)',

@@ -116,13 +116,7 @@ export default function MediaEntryPageComponent(props) {
 
     const [searchResults, setSearchResults] = useState([]);
 
-/*************  ✨ Windsurf Command ⭐  *************/
-    /**
-     * Fetches media entries from the API, given a search query.
-     * @param {string} query - The search query to use for the API request.
-     * @returns {Promise<void>}
-     */
-/*******  25a928a8-adc2-4941-85e2-c4dde3a5262d  *******/
+
     async function fetchMediaEntriesFromApi(query) {
         
         const options = {
@@ -216,7 +210,7 @@ export default function MediaEntryPageComponent(props) {
     
 
 
-    const newMediaEntryForm = 
+    const saveMediaEntryForm = 
         <form onSubmit={(e) => {
             e.preventDefault();
             handleNewMediaEntrySubmit();
@@ -246,8 +240,7 @@ export default function MediaEntryPageComponent(props) {
                 
                 <button className="w-1/2 bg-main-color hover:bg-secondary-color text-white font-bold py-2 px-4 rounded-3xl focus:outline-none focus:shadow-outline mt-2"
                 >Submit</button>
-              
-            
+    
         </form>
 
     return (
@@ -256,7 +249,6 @@ export default function MediaEntryPageComponent(props) {
             <Header/>
             <div className="bg-main-color min-h-screen py-20 px-80">
 
-                
 
                 <div className="welcome-message flex flex-col items-center mt-16">
                     <h1 className="text-6xl font-bold first-letter:uppercase">
@@ -271,7 +263,7 @@ export default function MediaEntryPageComponent(props) {
                         Add New
                     </button>
                 </div>
-                <div className="grid grid-cols-4 gap-16 mt-10">
+                <div className="grid grid-cols-4 gap-12 mt-10">
                 { userMediaEntriesList.length > 0 ? (
                     userMediaEntriesList.map((mediaItem) => (
                         <MediaEntryCard key={mediaItem.id} mediaItem={mediaItem} />
@@ -296,7 +288,7 @@ export default function MediaEntryPageComponent(props) {
                                     {searchResultList} 
                                 </div>) :
                                 (
-                                    newMediaEntryForm
+                                    saveMediaEntryForm
                                 )
                             }
                             
@@ -305,14 +297,8 @@ export default function MediaEntryPageComponent(props) {
                 )}
                 
             </div>
-
             
-            
-                
             <Footer />
-
-            
-            
         </div>
     );
 }
