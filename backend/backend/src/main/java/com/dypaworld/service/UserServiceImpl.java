@@ -1,10 +1,13 @@
 package com.dypaworld.service;
 
+import com.dypaworld.model.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dypaworld.model.entity.User;
 import com.dypaworld.repository.UserRepository;
+
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -12,9 +15,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+
     @Override
-    public void registerUser(String username, String email, String password) {
-        if (username == null || email == null || password == null) {
+    public User registerUser(UserDTO userDTO) {
+        if (userDTO == null) {
+            throw new IllegalArgumentException("UserDTO cannot be null");
+        }
+        String name = userDTO.getName();
+        String email = userDTO.getEmail();
+        String password = userDTO.getPassword();
+
+        if (name == null || email == null || password == null) {
             throw new IllegalArgumentException("Username, email, and password cannot be null");
         }
 
@@ -22,40 +33,60 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Email already exists");
         }
 
-        if (userRepository.existsByUsername(username)) {
+        if (userRepository.existsByName(name)) {
             throw new IllegalArgumentException("Username already exists");
         }
 
-        // Create a new User entity
-        User newUser = new User(username, email, password);
-        userRepository.save(newUser);
-    };
+        User newUser = new User(name, email, password);
+        return userRepository.save(newUser);
+    }
 
     @Override
-    public boolean loginUser(String email, String password) {
+    public boolean loginUser(UserDTO userDTO) {
+        if (userDTO == null) {
+            throw new IllegalArgumentException("UserDTO cannot be null");
+        }
+        String email = userDTO.getEmail();
+        String password = userDTO.getPassword();
+
         if (email == null || password == null) {
             throw new IllegalArgumentException("Email and password cannot be null");
         }
 
-        User user = userRepository.findByEmail(email);
-        if (user != null && user.getPassword().equals(password)) {
-            return true;
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) {
+            throw new IllegalArgumentException("User not found with the provided email");
         } else {
-            return false;
+            if (user.get().getPassword().equals(password)) {
+                return true;
+            } else {
+                throw new IllegalArgumentException("Incorrect password");
+            }
         }
-         
     }
 
+
     @Override
-    public void updateUserDetails(Integer userId, String newDetails) {
+    public User updateUserDetails(UserDTO userDTO) {
         // TODO: Implement the logic to update user details
-        return;
+        return null;
+    }
+
+    // deleteUser method to remove a user from the system
+    @Override
+    public boolean deleteUser(Long userId) {
+        // TODO: Implement the logic to delete a user by ID
+        return false;
     }
 
     @Override
-    public void deleteUser(Integer userId) {
-        // TODO: Implement the logic to delete a user
-        return;
+    public User getUserById(Long userId) {
+        if (userId == null || userId <= 0) {
+            throw new IllegalArgumentException("User ID must be a positive integer");
+        }
+
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User with ID " + userId + " does not exist"));
     }
 
 

@@ -1,16 +1,22 @@
 package com.dypaworld.service;
 
+import com.dypaworld.model.dto.MediaEntryDTO;
+import com.dypaworld.model.dto.UserMediaEntryDTO;
 import com.dypaworld.model.entity.MediaEntry;
+import com.dypaworld.model.entity.User;
+
 import java.util.List;
 
 public interface MediaEntryService {
-    void addMediaEntry(String title, String description, String mediaType, String filePath, Integer userId);
+    MediaEntry addMediaEntry(MediaEntryDTO mediaEntryDTO, User user);
 
-    void updateMediaEntry(Integer entryId, String title, String description, String mediaType, String filePath);
+    MediaEntry updateMediaEntry(MediaEntryDTO mediaEntryDTO);
 
-    void deleteMediaEntry(Integer entryId);
+    boolean deleteMediaEntry(Long entryId);
 
-    MediaEntry getMediaEntryById(Integer entryId);
+    MediaEntry getMediaEntryById(Long entryId);
 
-    List<MediaEntry> getAllMediaEntriesByUserIdAndCategory(Integer userId, String category);
+    List<UserMediaEntryDTO> getAllMediaEntriesByUserAndCategory(User user, String category);
+
+
 }

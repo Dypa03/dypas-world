@@ -1,50 +1,139 @@
 package com.dypaworld.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import com.dypaworld.model.dto.UserMediaEntryDTO;
+import com.dypaworld.model.entity.UserMediaEntry;
+import com.dypaworld.model.entity.UserMediaEntryKey;
+import com.dypaworld.repository.UserMediaEntryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dypaworld.model.entity.MediaEntry;
+import com.dypaworld.model.dto.MediaEntryDTO;
 import com.dypaworld.repository.MediaEntryRepository;
+import org.springframework.stereotype.Service;
+import com.dypaworld.model.entity.User;
 
+@Service
 public class MediaEntryServiceImpl implements MediaEntryService {
 
     @Autowired
     private MediaEntryRepository mediaEntryRepository;
 
-    @Override
-    public void addMediaEntry(String title, String description, String mediaType, String filePath, Integer userId) {
-        return;
-    };
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserMediaEntryRepository userMediaEntryRepository;
 
     @Override
-    public void updateMediaEntry(Integer entryId, String title, String description, String mediaType, String filePath) {
-        return;
-    };
+    public MediaEntry addMediaEntry(MediaEntryDTO mediaEntryDTO, User user) {
+        if (mediaEntryDTO == null || mediaEntryDTO.getCategory() == null || mediaEntryDTO.getTitle() == null) {
+            throw new IllegalArgumentException("Media entry data cannot be null");
+        };
 
-    @Override
-    public void deleteMediaEntry(Integer entryId) {
-        return;
-    };
-
-    @Override
-    public MediaEntry getMediaEntryById(Integer entryId) {
-        return null;
-    };
-
-    @Override
-    public List<MediaEntry> getAllMediaEntriesByUserIdAndCategory(Integer userId, String category) {
-        if (userId == null || category == null) {
-            throw new IllegalArgumentException("User ID and category cannot be null");
+        if (user == null || user.getId() == null) {
+            throw new IllegalArgumentException("User is not authenticated or does not exist");
         }
 
-        // Check if the user exists
-        if (!mediaEntryRepository.existsById(userId)) {
-            throw new IllegalArgumentException("User with ID " + userId + " does not exist");
+        System.out.println("Adding media entry for user: " + user.getId());
+        System.out.println(mediaEntryDTO);
+
+        MediaEntry mediaEntry = new MediaEntry();
+
+        Optional<MediaEntry> existingMediaEntry = mediaEntryRepository.findByApiMediaRecordIdAndCategory(mediaEntryDTO.getApiMediaRecordId(), mediaEntryDTO.getCategory());
+        if (existingMediaEntry.isEmpty()) {
+            mediaEntry.setApiMediaRecordId(mediaEntryDTO.getApiMediaRecordId());
+            mediaEntry.setCategory(mediaEntryDTO.getCategory());
+            mediaEntry.setTitle(mediaEntryDTO.getTitle());
+            mediaEntry.setImageUrl(mediaEntryDTO.getImageUrl());
+            
+            mediaEntry = mediaEntryRepository.save(mediaEntry);
+        } else {
+            mediaEntry = existingMediaEntry.get();
         }
 
-        return mediaEntryRepository.findMediaEntriesByUserIdAndCategory(userId, category);
+        UserMediaEntryKey userMediaEntryKey = new UserMediaEntryKey(user.getId(), mediaEntry.getId());
+
+        UserMediaEntry userMediaEntry = new UserMediaEntry();
+        userMediaEntry.setId(userMediaEntryKey);
+        userMediaEntry.setUser(user);
+        userMediaEntry.setMediaEntry(mediaEntry);
+        userMediaEntry.setRating(mediaEntryDTO.getRating());
+
+        userMediaEntryRepository.save(userMediaEntry);
+
+        return mediaEntry;
     };
 
+    @Override
+    public MediaEntry updateMediaEntry(MediaEntryDTO mediaEntryDTO) {
+        if (mediaEntryDTO == null || mediaEntryDTO.getId() == null) {
+            throw new IllegalArgumentException("Media entry data cannot be null and must have an ID");
+        }
 
+        MediaEntry existingMediaEntry = mediaEntryRepository.findById(mediaEntryDTO.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Media entry with ID " + mediaEntryDTO.getId() + " does not exist"));
+
+        existingMediaEntry.setCategory(mediaEntryDTO.getCategory());
+        existingMediaEntry.setTitle(mediaEntryDTO.getTitle());
+        existingMediaEntry.setImageUrl(mediaEntryDTO.getImageUrl());
+
+        return mediaEntryRepository.save(existingMediaEntry);
+    };
+
+    @Override
+    public boolean deleteMediaEntry(Long entryId) {
+        if (entryId <= 0) {;
+            throw new IllegalArgumentException("Entry ID must be a positive integer");
+        }
+
+        if (!mediaEntryRepository.existsById(entryId)) {
+            throw new IllegalArgumentException("Media entry with ID " + entryId + " does not exist");
+        }
+
+        mediaEntryRepository.deleteById(entryId);
+        return true;
+    };
+
+    @Override
+    public MediaEntry getMediaEntryById(Long entryId) {
+        if (entryId == null || entryId <= 0) {
+            throw new IllegalArgumentException("Entry ID must be a positive integer");
+        }
+
+        return mediaEntryRepository.findById(entryId)
+                .orElseThrow(() -> new IllegalArgumentException("Media entry with ID " + entryId + " does not exist"));
+    };
+
+    @Override
+    public List<UserMediaEntryDTO> getAllMediaEntriesByUserAndCategory(User user, String category) {
+        if (user == null || user.getId() == null) {
+            throw new IllegalArgumentException("User is not authenticated or does not exist");
+        }
+        if (category == null) {
+            throw new IllegalArgumentException("Category cannot be null");
+        }
+
+        List<UserMediaEntry> allUserMediaEntries = userMediaEntryRepository.findByUserId(user.getId());
+
+        List<UserMediaEntryDTO> userMediaEntriesByCategory = new ArrayList<>();
+
+        for (UserMediaEntry userMediaEntry : allUserMediaEntries) {
+            if (userMediaEntry.getMediaEntry().getCategory().equals(category)) {
+
+                UserMediaEntryDTO userMediaEntryDTO = new UserMediaEntryDTO();
+                userMediaEntryDTO.setMediaEntryId(userMediaEntry.getId().getMediaEntryId());
+                userMediaEntryDTO.setTitle(userMediaEntry.getMediaEntry().getTitle());
+                userMediaEntryDTO.setImageUrl(userMediaEntry.getMediaEntry().getImageUrl());
+                userMediaEntryDTO.setRating(userMediaEntry.getRating());
+
+                userMediaEntriesByCategory.add(userMediaEntryDTO);
+            }
+        }
+
+        return userMediaEntriesByCategory;
+    }
 }
