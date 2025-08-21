@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import MediaEntryCard from "./MediaEntryCard";
 import Header from "./Header"
 import Footer from "./Footer";
- 
+import ScrollToTopButton from "./ScrollToTopButton";
+
 
 
 
@@ -227,10 +228,10 @@ export default function MediaEntryPageComponent(props) {
                     <div className="h-[500px] grid grid-cols-4 gap-4 overflow-scroll overflow-x-auto rounded-3xl">
                         {searchResults.map((searchEntryItem) => (
                             console.log(searchEntryItem),
-                            searchEntryItem.poster_path == null ? null :
+                            searchEntryItem.poster_path == null || searchEntryItem.adult ? null :
 
                             <div key={searchEntryItem.id}
-                                className="rounded-3xl max-w-[270px] shadow-sm text-slate-900"
+                                className="rounded-3xl max-w-[270px] shadow-sm hover:scale-105 transition-transform duration-300"
 
                                 
 
@@ -247,8 +248,9 @@ export default function MediaEntryPageComponent(props) {
                                 <img src=
                                         {`${props.posterImagePrefix}${searchEntryItem.poster_path}`}
                                     
-                                    className="rounded-3xl justify-center h-[270px] object-cover w-full hover:scale-105 transition-transform duration-300"
+                                    className="rounded-3xl justify-center h-[270px] object-cover w-full "
                                     alt="" />
+                                <h3 className="text-center font-bold my-2">{searchEntryItem.title}</h3>
                             </div>
                         ))}
                     </div>
@@ -280,15 +282,19 @@ export default function MediaEntryPageComponent(props) {
 
 
     const saveMediaEntryForm = 
+        <div>
+            <i  onClick={() => setSearchFormMode("search")}
+                className="fa fa-arrow-left text-gray-700 dark:text-white fixed top-[18%] left-[26%] z-50 hover:cursor-pointer"></i>
         <form onSubmit={(e) => {
             e.preventDefault();
             handleNewMediaEntrySubmit();
         }}
             className=" p-6 rounded-lg flex flex-col gap-3 justify-center items-center"
         >
+                
 
                 <img 
-                    className="rounded-3xl h-[360px] object-cover w-full"
+                    className="rounded-3xl w-[240px] h-[360px] object-cover"
                     src={newMediaEntryData.imageUrl} alt="" />
                 <h2 className="text-3xl font-bold">{newMediaEntryData.title}</h2>
                 <label htmlFor="rating" className="text-xl font-bold mt-4">Insert your Rating:</label>
@@ -310,6 +316,7 @@ export default function MediaEntryPageComponent(props) {
                 >Submit</button>
     
         </form>
+        </div>
 
     const editMediaEntryForm = 
         <form onSubmit={(e) => {
@@ -320,7 +327,7 @@ export default function MediaEntryPageComponent(props) {
         >
 
                 <img 
-                    className="rounded-3xl h-[360px] object-cover w-full"
+                    className="rounded-3xl w-[240px] h-[360px] object-cover"
                     src={mediaEntryToEdit.imageUrl} alt="" />
                 <h2 className="text-3xl font-bold">{mediaEntryToEdit.title}</h2>
                 <label htmlFor="rating" className="text-xl font-bold mt-4">Insert your Rating:</label>
@@ -443,6 +450,8 @@ export default function MediaEntryPageComponent(props) {
             </div>
             
             <Footer />
+            <ScrollToTopButton />
+            
         </div>
     );
 }
