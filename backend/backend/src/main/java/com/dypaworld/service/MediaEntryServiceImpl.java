@@ -69,19 +69,19 @@ public class MediaEntryServiceImpl implements MediaEntryService {
     };
 
     @Override
-    public MediaEntry updateMediaEntry(MediaEntryDTO mediaEntryDTO) {
-        if (mediaEntryDTO == null || mediaEntryDTO.getId() == null) {
+    public UserMediaEntry updateMediaEntry(UserMediaEntryDTO userMediaEntryDTO, User user) {
+        if (userMediaEntryDTO == null || userMediaEntryDTO.getMediaEntryId() == null) {
             throw new IllegalArgumentException("Media entry data cannot be null and must have an ID");
         }
 
-        MediaEntry existingMediaEntry = mediaEntryRepository.findById(mediaEntryDTO.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Media entry with ID " + mediaEntryDTO.getId() + " does not exist"));
+        UserMediaEntryKey userMediaEntryKey = new UserMediaEntryKey(user.getId(), userMediaEntryDTO.getMediaEntryId());
 
-        existingMediaEntry.setCategory(mediaEntryDTO.getCategory());
-        existingMediaEntry.setTitle(mediaEntryDTO.getTitle());
-        existingMediaEntry.setImageUrl(mediaEntryDTO.getImageUrl());
+        UserMediaEntry existingUserMediaEntry = userMediaEntryRepository.findById(userMediaEntryKey)
+                .orElseThrow(() -> new IllegalArgumentException("Media entry with ID " + userMediaEntryDTO.getMediaEntryId() + " does not exist"));
 
-        return mediaEntryRepository.save(existingMediaEntry);
+        existingUserMediaEntry.setRating(userMediaEntryDTO.getRating());
+        System.out.println("Boooh");
+        return userMediaEntryRepository.save(existingUserMediaEntry);
     };
 
     @Override

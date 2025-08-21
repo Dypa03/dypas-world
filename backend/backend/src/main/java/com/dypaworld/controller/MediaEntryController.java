@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import com.dypaworld.model.dto.UserMediaEntryDTO;
 import com.dypaworld.model.entity.User;
+import com.dypaworld.model.entity.UserMediaEntry;
 import com.dypaworld.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -40,6 +41,14 @@ public class MediaEntryController {
         String email = principal.getAttribute("email");
         Optional<User> user = userRepository.findByEmail(email);
         return mediaEntryService.getAllMediaEntriesByUserAndCategory(user.orElse(null), category);
+    }
+
+    @PostMapping(path = "/update-rating")
+    public UserMediaEntry updateMediaEntry(@RequestBody UserMediaEntryDTO userMediaEntryDTO,
+                                           @AuthenticationPrincipal OAuth2User principal) {
+        String email = principal.getAttribute("email");
+        Optional<User> user = userRepository.findByEmail(email);
+        return mediaEntryService.updateMediaEntry(userMediaEntryDTO, user.orElse(null));
     }
 
     @GetMapping(path = "/get-all-by-user")

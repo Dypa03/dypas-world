@@ -10,11 +10,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserMediaEntryDTO {
-
     Long mediaEntryId;
     String title;
     String imageUrl;
     int rating;
 
-
+    // Constructor for updating rating
+    public UserMediaEntryDTO(Long mediaEntryId, int rating) {
+        this.mediaEntryId = mediaEntryId;
+        this.rating = rating;
+    }
 }
