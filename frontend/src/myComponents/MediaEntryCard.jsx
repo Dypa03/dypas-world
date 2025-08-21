@@ -4,7 +4,7 @@ export default function MediaEntryCard({ mediaItem }) {
     return (
         
             
-            <div className="rounded-3xl flex flex-col w-[270px] shadow-sm bg-white text-slate-900 ">
+            <div className="rounded-3xl flex flex-col w-[270px] shadow-sm bg-white text-slate-900 hover:scale-105 hover:shadow-secondary-color hover:shadow-md  hover:cursor-pointer :hover: transition-transform duration-300 ">
                 <img
                     src={mediaItem.imageUrl}
                     className="h-[360px] flex-auto rounded-t-3xl justify-center w-full object-cover"

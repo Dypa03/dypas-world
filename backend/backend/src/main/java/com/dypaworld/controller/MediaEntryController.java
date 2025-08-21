@@ -15,14 +15,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import com.dypaworld.model.entity.MediaEntry;
-import com.dypaworld.service.MediaEntryService;
+import com.dypaworld.service.UserMediaEntryService;
 
 @RestController
 @RequestMapping("/api/media-entry")
 public class MediaEntryController {
 
     @Autowired
-    private MediaEntryService mediaEntryService;
+    private UserMediaEntryService userMediaEntryService;
 
     @Autowired
     private UserRepository userRepository;
@@ -30,37 +30,37 @@ public class MediaEntryController {
     @PostMapping(path = "/add")
     public MediaEntry addMediaEntry(@RequestBody MediaEntryDTO mediaEntryDTO,
                                      @AuthenticationPrincipal OAuth2User principal) {
-        String email = principal.getAttribute("email");
-        Optional<User> user = userRepository.findByEmail(email);
-        return mediaEntryService.addMediaEntry(mediaEntryDTO, user.orElse(null));
+        return userMediaEntryService.addMediaEntry(mediaEntryDTO, getUserFromPrincipal(principal).orElse(null));
     }
 
     @GetMapping(path = "/get-all-by-category-user")
     public List<UserMediaEntryDTO> getMediaEntryByUserAndCategory(@RequestParam("category") String category,
                                                                   @AuthenticationPrincipal OAuth2User principal) {
-        String email = principal.getAttribute("email");
-        Optional<User> user = userRepository.findByEmail(email);
-        return mediaEntryService.getAllMediaEntriesByUserAndCategory(user.orElse(null), category);
+
+        return userMediaEntryService.getAllMediaEntriesByUserAndCategory(getUserFromPrincipal(principal).orElse(null), category);
     }
 
     @PostMapping(path = "/update-rating")
     public UserMediaEntry updateMediaEntry(@RequestBody UserMediaEntryDTO userMediaEntryDTO,
                                            @AuthenticationPrincipal OAuth2User principal) {
-        String email = principal.getAttribute("email");
-        Optional<User> user = userRepository.findByEmail(email);
-        return mediaEntryService.updateMediaEntry(userMediaEntryDTO, user.orElse(null));
+        return userMediaEntryService.updateUserMediaEntry(userMediaEntryDTO, getUserFromPrincipal(principal).orElse(null));
     }
 
     @GetMapping(path = "/get-all-by-user")
     public List<MediaEntry> getMediaEntryByUserId(@AuthenticationPrincipal OAuth2User principal) {
-        String email = principal.getAttribute("email");
-        Optional<User> user = userRepository.findByEmail(email);
         return null;
     }
 
-    @PostMapping(path = "/delete")
-    public boolean deleteMediaEntry(@RequestParam ("id") Long id) {
-        return mediaEntryService.deleteMediaEntry(id);
+
+
+    @PostMapping(path = "/delete/{id}")
+    public boolean deleteMediaEntry(@PathVariable("id") Long id, @AuthenticationPrincipal OAuth2User principal) {
+        System.out.println("MIAOOOOOOOOOOOOOOOOOOOOOOOO");
+        return userMediaEntryService.deleteUserMediaEntry(id, getUserFromPrincipal(principal).orElse(null));
     }
 
+    private Optional<User> getUserFromPrincipal(OAuth2User principal) {
+        String email = principal.getAttribute("email");
+        return userRepository.findByEmail(email);
+    }
 }

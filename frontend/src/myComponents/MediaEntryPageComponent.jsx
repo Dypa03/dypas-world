@@ -164,6 +164,29 @@ export default function MediaEntryPageComponent(props) {
         }
     };
 
+    async function deleteMediaEntry(mediaEntryId) {
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            },
+            credentials: "include"
+        }
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/media-entry/delete/${mediaEntryId}`, options);
+            if (response.ok) {
+                console.log("wow");
+                loadUserEntryDataList();
+            }
+            else {
+                console.log("wtf");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     async function fetchMediaEntriesFromApi(query) {
         
@@ -288,7 +311,7 @@ export default function MediaEntryPageComponent(props) {
     
         </form>
 
-    const editMediaEntryRatingForm = 
+    const editMediaEntryForm = 
         <form onSubmit={(e) => {
             e.preventDefault();
             handleMediaEntryToEditSubmit();
@@ -316,8 +339,20 @@ export default function MediaEntryPageComponent(props) {
                 </span>
                 
                 <button className="w-1/2 bg-main-color hover:bg-secondary-color text-white font-bold py-2 px-4 rounded-3xl focus:outline-none focus:shadow-outline mt-2"
-                >Submit</button>
-    
+                >Rate</button>
+
+                <button 
+                        className="w-1/2 bg-red-500 hover:bg-secondary-color text-white font-bold py-2 px-4 rounded-3xl focus:outline-none focus:shadow-outline mx-auto"
+                        onClick={() => {
+                            deleteMediaEntry(mediaEntryToEdit.mediaEntryId)
+                            setIsSearchFormShown(false)
+                            setSearchFormMode('search')
+                            loadUserEntryDataList()
+                        } 
+                        }>
+                        Delete
+                    </button>
+                
         </form>
 
     function handleFormShown() {
@@ -337,7 +372,8 @@ export default function MediaEntryPageComponent(props) {
         } else if (searchFormMode == "edit") {
             return (
                 <div>
-                    {editMediaEntryRatingForm}
+                    {editMediaEntryForm}
+                    
                 </div>
             )
         }
@@ -363,6 +399,7 @@ export default function MediaEntryPageComponent(props) {
                         Add New
                     </button>
                 </div>
+
                 <div className="grid grid-cols-4 gap-12 mt-10">
                 { userMediaEntriesList.length > 0 ? (
                     userMediaEntriesList.map((mediaItem) => (

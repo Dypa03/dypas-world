@@ -8,12 +8,12 @@ import com.dypaworld.model.entity.UserMediaEntry;
 
 import java.util.List;
 
-public interface MediaEntryService {
+public interface UserMediaEntryService {
     MediaEntry addMediaEntry(MediaEntryDTO mediaEntryDTO, User user);
 
-    UserMediaEntry updateMediaEntry(UserMediaEntryDTO userMediaEntryDTO, User user);
+    UserMediaEntry updateUserMediaEntry(UserMediaEntryDTO userMediaEntryDTO, User user);
 
-    boolean deleteMediaEntry(Long entryId);
+    boolean deleteUserMediaEntry(Long entryId, User user);
 
     MediaEntry getMediaEntryById(Long entryId);
 

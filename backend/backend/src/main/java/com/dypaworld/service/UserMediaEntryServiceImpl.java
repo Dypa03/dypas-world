@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import com.dypaworld.model.entity.User;
 
 @Service
-public class MediaEntryServiceImpl implements MediaEntryService {
+public class UserMediaEntryServiceImpl implements UserMediaEntryService {
 
     @Autowired
     private MediaEntryRepository mediaEntryRepository;
@@ -69,7 +69,7 @@ public class MediaEntryServiceImpl implements MediaEntryService {
     };
 
     @Override
-    public UserMediaEntry updateMediaEntry(UserMediaEntryDTO userMediaEntryDTO, User user) {
+    public UserMediaEntry updateUserMediaEntry(UserMediaEntryDTO userMediaEntryDTO, User user) {
         if (userMediaEntryDTO == null || userMediaEntryDTO.getMediaEntryId() == null) {
             throw new IllegalArgumentException("Media entry data cannot be null and must have an ID");
         }
@@ -80,21 +80,32 @@ public class MediaEntryServiceImpl implements MediaEntryService {
                 .orElseThrow(() -> new IllegalArgumentException("Media entry with ID " + userMediaEntryDTO.getMediaEntryId() + " does not exist"));
 
         existingUserMediaEntry.setRating(userMediaEntryDTO.getRating());
-        System.out.println("Boooh");
+
         return userMediaEntryRepository.save(existingUserMediaEntry);
     };
 
     @Override
-    public boolean deleteMediaEntry(Long entryId) {
+    public boolean deleteUserMediaEntry(Long entryId, User user) {
         if (entryId <= 0) {;
             throw new IllegalArgumentException("Entry ID must be a positive integer");
         }
 
-        if (!mediaEntryRepository.existsById(entryId)) {
-            throw new IllegalArgumentException("Media entry with ID " + entryId + " does not exist");
+        if (user == null || user.getId() == null) {
+            throw new IllegalArgumentException("User is not authenticated or does not exist");
         }
 
-        mediaEntryRepository.deleteById(entryId);
+        System.out.println("Deleting media entry for user: " + user.getId());
+        UserMediaEntryKey userMediaEntryKey = new UserMediaEntryKey(user.getId(), entryId);
+        System.out.println(userMediaEntryKey);
+
+        UserMediaEntry existingUserMediaEntry = userMediaEntryRepository.findByUserIdAndMediaEntryId(user.getId(), entryId)
+                .orElseThrow(() -> new IllegalArgumentException("Media entry with ID " + entryId + " does not exist"));
+
+        try {
+            userMediaEntryRepository.delete(existingUserMediaEntry);
+        } catch (Exception e) {
+            return false;
+        }
         return true;
     };
 
