@@ -193,17 +193,18 @@ export default function MediaEntryPageComponent(props) {
         
         const options = {
         method: 'GET',
-        headers: {
-            accept: 'application/json',
-            Authorization: `Bearer ${props.apiKey}`
-        }
+        headers: props.headers
         };
 
         try {
             const response = await fetch(`${props.querySearchPrefix}${query}`, options);
             const data = await response.json();
+            const adaptedData = props.searchDataResultAdapter(data);
+            
             console.log(data);
-            setSearchResults(data.results);
+            console.log(adaptedData);
+
+            setSearchResults(adaptedData);
         } catch (error) {
             console.error(error);
         }
@@ -228,30 +229,31 @@ export default function MediaEntryPageComponent(props) {
                     <div className="h-[500px] grid grid-cols-4 gap-4 overflow-scroll overflow-x-auto rounded-3xl">
                         {searchResults.map((searchEntryItem) => (
                             console.log(searchEntryItem),
-                            searchEntryItem.poster_path == null || searchEntryItem.adult ? null :
 
-                            <div key={searchEntryItem.id}
-                                className="rounded-3xl max-w-[270px] shadow-sm hover:scale-105 transition-transform duration-300"
+                            searchEntryItem = props.mediaEntryFromApiAdapter(searchEntryItem),
+                            console.log(searchEntryItem),
 
-                                
+                            searchEntryItem.imagePosterSuffix == null || searchEntryItem.adult ? null :
+                                <div key={searchEntryItem.apiMediaRecordId}
+                                    className="rounded-3xl max-w-[270px] shadow-sm hover:scale-105 transition-transform duration-300"
 
-                                onClick={() => {handleNewMediaEntryDataChange({
-                                    ...newMediaEntryData,
-                                    apiMediaRecordId: searchEntryItem.id,
-                                    title: searchEntryItem.title,
-                                    category: props.categoryName,
-                                    imageUrl: `${props.posterImagePrefix}${searchEntryItem.poster_path}`
-                                })
-                                setSearchFormMode('add');}
-                                }
-                                >
-                                <img src=
-                                        {`${props.posterImagePrefix}${searchEntryItem.poster_path}`}
-                                    
-                                    className="rounded-3xl justify-center h-[270px] object-cover w-full "
-                                    alt="" />
-                                <h3 className="text-center font-bold my-2">{searchEntryItem.title}</h3>
-                            </div>
+                                    onClick={() => {handleNewMediaEntryDataChange({
+                                        ...newMediaEntryData,
+                                        apiMediaRecordId: searchEntryItem.apiMediaRecordId,
+                                        title: searchEntryItem.title,
+                                        category: searchEntryItem.category,
+                                        imageUrl: searchEntryItem.imageUrl
+                                    })
+                                    setSearchFormMode('add');}
+                                    }
+                                    >
+                                    <img src=
+                                            {searchEntryItem.imageUrl}
+                                        
+                                        className="rounded-3xl justify-center h-[270px] object-cover w-full "
+                                        alt="" />
+                                    <h3 className="text-center font-bold my-2">{searchEntryItem.title}</h3>
+                                </div>
                         ))}
                     </div>
                 </div>
@@ -395,7 +397,7 @@ export default function MediaEntryPageComponent(props) {
 
                 <div className="welcome-message flex flex-col items-center mt-16">
                     <h1 className="text-6xl font-bold first-letter:uppercase">
-                        {props.categoryName}s
+                        {props.categoryTitle}
                     </h1>
                     <p className="text-1xl">
                         You have {props.categoryBasedMessage}: {userMediaEntriesList.length}

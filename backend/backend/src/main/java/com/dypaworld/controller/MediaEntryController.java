@@ -55,7 +55,6 @@ public class MediaEntryController {
 
     @PostMapping(path = "/delete/{id}")
     public boolean deleteMediaEntry(@PathVariable("id") Long id, @AuthenticationPrincipal OAuth2User principal) {
-        System.out.println("MIAOOOOOOOOOOOOOOOOOOOOOOOO");
         return userMediaEntryService.deleteUserMediaEntry(id, getUserFromPrincipal(principal).orElse(null));
     }
 
