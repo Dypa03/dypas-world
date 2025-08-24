@@ -14,7 +14,7 @@ function App() {
   const categoryRoutes = categoriesData.map((category) => (
     <Route
       key={category.categoryName}
-      path={`/${category.categoryName}s`}
+      path={`/${category.pageLink}`}
       element={<MediaEntryPageComponent category={category} />}
     />
   ))

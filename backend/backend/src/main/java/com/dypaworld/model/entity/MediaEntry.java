@@ -1,10 +1,8 @@
 package com.dypaworld.model.entity;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -26,7 +24,7 @@ public class MediaEntry {
     private Long id;
 
     @Column(name = "api_media_record_id")
-    private Long apiMediaRecordId;
+    private String apiMediaRecordId;
 
     @Column(nullable = false)
     private String title;

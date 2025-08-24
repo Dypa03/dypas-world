@@ -57,7 +57,7 @@ export default function MediaEntryPageComponent(props) {
     const handleSearchFormDataSubmit = (e) => {
         e.preventDefault();
         fetchMediaEntriesFromApi(searchFormData);
-        setSearchFormData('');
+        console.log(searchFormData);
     };
 
     const handleNewMediaEntryDataChange = (data) => {
@@ -220,6 +220,10 @@ export default function MediaEntryPageComponent(props) {
         console.log(newMediaEntryData)
     }, [newMediaEntryData])
 
+    useEffect(() => {
+        console.log(searchFormData)
+    }, [searchFormData])
+
 
     const searchResultList = 
         <div className="search-results h-full">
@@ -228,12 +232,12 @@ export default function MediaEntryPageComponent(props) {
                     
                     <div className="h-[500px] grid grid-cols-4 gap-4 overflow-scroll overflow-x-auto rounded-3xl">
                         {searchResults.map((searchEntryItem) => (
-                            console.log(searchEntryItem),
+                            //console.log(searchEntryItem),
 
                             searchEntryItem = props.mediaEntryFromApiAdapter(searchEntryItem),
-                            console.log(searchEntryItem),
+                            //console.log(searchEntryItem),
 
-                            searchEntryItem.imagePosterSuffix == null || searchEntryItem.adult ? null :
+                            [null, ""].includes(searchEntryItem.imagePosterSuffix) || searchEntryItem.adult || [null, ""].includes(searchEntryItem.apiMediaRecordId) ? null :
                                 <div key={searchEntryItem.apiMediaRecordId}
                                     className="rounded-3xl max-w-[270px] shadow-sm hover:scale-105 transition-transform duration-300"
 

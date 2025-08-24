@@ -18,7 +18,7 @@ export const categoriesData = [
         querySearchPrefix: "https://api.themoviedb.org/3/search/movie?query=",
         headers: {
             "accept": 'application/json',
-            "Authorization": `Bearer ${import.meta.env.VITE_MOVIE_API_KEY}`
+            "Authorization": `Bearer ${import.meta.env.VITE_MOVIE_SHOW_API_KEY}`
         },
 
         searchDataResultAdapter: function searchDataResultAdapter(searchEntryData) {
@@ -48,7 +48,7 @@ export const categoriesData = [
         querySearchPrefix: "https://api.themoviedb.org/3/search/tv?query=",
         headers: {
             "accept": 'application/json',
-            "Authorization": `Bearer ${import.meta.env.VITE_MOVIE_API_KEY}`
+            "Authorization": `Bearer ${import.meta.env.VITE_MOVIE_SHOW_API_KEY}`
         },
 
         searchDataResultAdapter: function searchDataResultAdapter(searchEntryData) {
@@ -146,10 +146,31 @@ export const categoriesData = [
         categoryName: "comic",
         categoryTitle: "Comics",
         categoryCoverImage: comicsImage,
-        pageLink: "comics",
+        pageLink: "",
         categoryBasedMessage: "read",
-        posterImagePrefix: "comic-",
-        apiKey: import.meta.env.VITE_COMIC_API_KEY
+        querySearchPrefix: `https://comicvine.gamespot.com/api/search/?api_key=${import.meta.env.VITE_COMIC_API_KEY}&format=json&resources=volume&query=`,
+
+        headers: {
+            "accept": 'application/json',
+            "Content-Type": "application/json"
+        },
+
+        searchDataResultAdapter: function searchDataResultAdapter(searchEntryData) {
+            return searchEntryData.data
+        },
+
+        mediaEntryFromApiAdapter: function mediaEntryFromApiAdapter(searchEntryItem) {
+            const mediaEntry = {
+                apiMediaRecordId: searchEntryItem.mal_id,
+                title: searchEntryItem.title_english,
+                category: "mangas",
+                imageUrl: searchEntryItem.images.jpg.image_url,
+                adult: false,
+                imagePosterSuffix: searchEntryItem.images.jpg.image_url
+            }
+            
+            return mediaEntry
+        },
     },
 
     {
@@ -168,7 +189,27 @@ export const categoriesData = [
         categoryCoverImage: albumsImage,
         pageLink: "music-albums",
         categoryBasedMessage: "listened to",
-        posterImagePrefix: "album-",
-        apiKey: import.meta.env.VITE_ALBUM_API_KEY
+        
+        querySearchPrefix: `http://ws.audioscrobbler.com/2.0/?method=album.search&api_key=${import.meta.env.VITE_MUSIC_API_KEY}&format=json&album=`,
+        headers: {
+            "accept": 'application/json',
+        },
+
+        searchDataResultAdapter: function searchDataResultAdapter(searchEntryData) {
+            return searchEntryData.results.albummatches.album
+        },
+
+        mediaEntryFromApiAdapter: function mediaEntryFromApiAdapter(searchEntryItem) {
+            const mediaEntry = {
+                apiMediaRecordId: searchEntryItem.mbid,
+                title: searchEntryItem.name,
+                category: "album",
+                imageUrl: searchEntryItem.image[3]['#text'],
+                adult: false,
+                imagePosterSuffix: searchEntryItem.image[3]['#text']
+            }
+            
+            return mediaEntry
+        },
     }
 ]

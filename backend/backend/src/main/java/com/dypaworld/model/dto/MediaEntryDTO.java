@@ -1,7 +1,6 @@
 package com.dypaworld.model.dto;
 
 import lombok.*;
-import com.dypaworld.model.entity.User;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -10,7 +9,7 @@ import com.dypaworld.model.entity.User;
 @ToString
 public class MediaEntryDTO {
     private Long id;
-    private Long apiMediaRecordId;
+    private String apiMediaRecordId;
     private String title;
     private String category;
     private int rating;
@@ -18,7 +17,7 @@ public class MediaEntryDTO {
     private String createdAt;
 
     // Constructor for media entry creation
-    public MediaEntryDTO(String title, String category, String imageUrl, Long apiMediaRecordId, int rating) {
+    public MediaEntryDTO(String title, String category, String imageUrl, String apiMediaRecordId, int rating) {
         this.apiMediaRecordId = apiMediaRecordId;
         this.title = title;
         this.category = category;
