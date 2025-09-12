@@ -34,6 +34,10 @@ public class MediaEntry {
 
     private String imageUrl;
 
+    private String releaseDate;
+
+    private String author;
+
     @OneToMany(mappedBy = "mediaEntry")
     @JsonIgnore
     private Set<UserMediaEntry> userMediaEntries;

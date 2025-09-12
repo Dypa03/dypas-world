@@ -9,7 +9,7 @@ export default function Header() {
     const navigate = useNavigate();
 
     return (
-        <header className='bg-n-white w-full h-header flex items-center justify-between px-56 fixed top-0 left-0 z-40 '>
+        <header className='bg-main-white w-full h-header flex items-center justify-between px-56 fixed top-0 left-0 z-40 '>
 
                 <div className='logo-container flex items-center text-t-logo font-bold '>
                     <img src={logo} alt='Wizard Logo' 
@@ -32,13 +32,13 @@ export default function Header() {
                 </div>
 
                 <div className='flex items-center justify-end gap-4 w-1/5'>
-                    <button className='w-1/2 text-lg text-secondary-color p-2 rounded-lg bg-n-white hover:bg-secondary-color hover:text-n-white transition duration-300'
+                    <button className='w-1/2 text-lg text-secondary-color p-2 rounded-lg bg-main-white hover:bg-secondary-color hover:text-main-white transition duration-300'
                             onClick={()=> window.location.href='/'}>
                             <i className='fa fa-home pr-1'></i>
-                            <span className='text-gray-700 ml-1 font-bold hover:text-n-white transition duration-300'>Homepage</span>
+                            <span className='text-gray-700 ml-1 font-bold hover:text-main-white transition duration-300'>Homepage</span>
                     </button>
                     
-                    <button className='login-button w-1/2 text-lg text-secondary-color p-2 rounded-lg bg-n-white hover:bg-secondary-color hover:text-n-white transition duration-300'
+                    <button className='login-button w-1/2 text-lg text-main-color p-2 rounded-lg bg-main-white hover:bg-main-color hover:text-main-white  transition duration-300'
                     onClick={()=> navigate('/login')}>
                             <i className='fa fa-user pr-1'></i>
                             Login

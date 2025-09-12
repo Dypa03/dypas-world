@@ -26,6 +26,8 @@ export default function MediaEntryPageComponent(props) {
         title: '',
         category: '',
         imageUrl: '',
+        releaseDate: '',
+        author: '',
         rating: 0
     });
 
@@ -246,7 +248,9 @@ export default function MediaEntryPageComponent(props) {
                                         apiMediaRecordId: searchEntryItem.apiMediaRecordId,
                                         title: searchEntryItem.title,
                                         category: searchEntryItem.category,
-                                        imageUrl: searchEntryItem.imageUrl
+                                        imageUrl: searchEntryItem.imageUrl,
+                                        releaseDate: searchEntryItem.releaseDate,
+                                        author: searchEntryItem.author
                                     })
                                     setSearchFormMode('add');}
                                     }
@@ -266,14 +270,14 @@ export default function MediaEntryPageComponent(props) {
 
     const searchMediaEntryForm = 
         <form onSubmit={handleSearchFormDataSubmit}
-            className=" p-2 rounded-lg flex flex-col gap-4 justify-center items-center"
+            className=" p-2 rounded-lg flex flex-col gap-2 justify-center items-center mb-3"
         >
             
             <label className="text-lg font-bold"
                 htmlFor="title">Insert a {props.categoryName} title:</label>
             <div className="bg-white flex px-1 py-1 rounded-full border border-blue-500 overflow-hidden max-w-md mx-auto">
                 <input
-                className="w-full outline-none bg-white pl-4 text-sm text-n-black" 
+                className="w-full outline-none bg-white pl-4 text-sm text-main-black" 
                 placeholder='Search Something...'
                 type="text" id="title" name="title" value={searchFormData.title} onChange={handleSearchFormDataChange} required />
                 
@@ -396,19 +400,19 @@ export default function MediaEntryPageComponent(props) {
         <div>
             
             <Header/>
-            <div className="bg-main-color min-h-screen py-20 px-80">
+            <div className="bg-main-shade-color min-h-screen py-20 px-80">
 
 
-                <div className="welcome-message flex flex-col items-center mt-16">
+                <div className="welcome-message flex flex-col gap-3 items-center mt-16">
                     <h1 className="text-6xl font-bold first-letter:uppercase">
                         {props.categoryTitle}
                     </h1>
-                    <p className="text-1xl">
+                    <p className="text-1xl mt-1">
                         You have {props.categoryBasedMessage}: {userMediaEntriesList.length}
                     </p>
                     <button 
                         onClick={() => setIsSearchFormShown(true)}
-                        className="text-white focus:outline-none focus:ring-4 mt-4 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 bg-black bg-opacity-30 w-40">
+                        className="text-white focus:outline-none focus:ring-4 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 bg-black bg-opacity-30 w-40">
                         Add New
                     </button>
                 </div>

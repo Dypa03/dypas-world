@@ -52,9 +52,10 @@ module.exports = {
         'main-color': '#4738BF',
         'secondary-color': '#FB9F18',
         'thirdary-color': '#FECD1B',
-        'footer-black': '#212121',
-        'n-white': '#F0F0F0',
-        'n-black': '#141414'
+        'footer-black': '#1a0033',
+        'main-white': '#F0F0F0',
+        'main-black': '#141414',
+        'main-shade-color': '#5E00B4'
       },
       fontSize: {
         't-logo': '31px',

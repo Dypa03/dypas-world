@@ -37,7 +37,7 @@ export default function HomePage() {
             <h1 className="text-8xl font-bold mt-10 ">
               Track Your <br /> Hobbies!
             </h1>
-            <p className="text-xl mt-4 text-secondary-color">
+            <p className="text-xl mt-4 text-thirdary-color">
               Within a few clicks, keep track of all the movies, shows, games, etc. <br /> that you enjoyed!
             </p>
             <button className="w-52 h-16 text-intro-font-size font-semibold bg-black bg-opacity-30 rounded-lg">
@@ -50,7 +50,7 @@ export default function HomePage() {
           />
         </div>
 
-        <div className="categories-section w-full bg-n-white text-n-black  flex flex-col items-center justify-around">
+        <div className="categories-section w-full bg-n-white text-main-black  flex flex-col items-center justify-around">
           <h3 className="mt-14 font-bold text-5xl">
             All Categories
           </h3>

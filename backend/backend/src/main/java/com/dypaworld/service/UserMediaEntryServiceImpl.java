@@ -49,6 +49,8 @@ public class UserMediaEntryServiceImpl implements UserMediaEntryService {
             mediaEntry.setCategory(mediaEntryDTO.getCategory());
             mediaEntry.setTitle(mediaEntryDTO.getTitle());
             mediaEntry.setImageUrl(mediaEntryDTO.getImageUrl());
+            mediaEntry.setReleaseDate(mediaEntryDTO.getReleaseDate());
+            mediaEntry.setAuthor(mediaEntryDTO.getAuthor());
             
             mediaEntry = mediaEntryRepository.save(mediaEntry);
         } else {
@@ -140,6 +142,8 @@ public class UserMediaEntryServiceImpl implements UserMediaEntryService {
                 userMediaEntryDTO.setTitle(userMediaEntry.getMediaEntry().getTitle());
                 userMediaEntryDTO.setImageUrl(userMediaEntry.getMediaEntry().getImageUrl());
                 userMediaEntryDTO.setRating(userMediaEntry.getRating());
+                userMediaEntryDTO.setReleaseDate(userMediaEntry.getMediaEntry().getReleaseDate());
+                userMediaEntryDTO.setAuthor(userMediaEntry.getMediaEntry().getAuthor());
 
                 userMediaEntriesByCategory.add(userMediaEntryDTO);
             }

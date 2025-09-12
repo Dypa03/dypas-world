@@ -14,10 +14,14 @@ public class UserMediaEntryDTO {
     String title;
     String imageUrl;
     int rating;
+    String releaseDate;
+    String author;
 
     // Constructor for updating rating
     public UserMediaEntryDTO(Long mediaEntryId, int rating) {
         this.mediaEntryId = mediaEntryId;
         this.rating = rating;
     }
+
+
 }

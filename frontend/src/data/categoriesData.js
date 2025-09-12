@@ -1,9 +1,9 @@
 import moviesImage from  '../assets/categories/movies2.jpg'
 import tvShowsImage from '../assets/categories/tv-shows.jpg'
-import gamesImage from '../assets/categories/games.jpeg'
+import gamesImage from '../assets/categories/games_cooming_soon.png'
 import animeImage from '../assets/categories/animes.jpg'
 import mangaImage from '../assets/categories/mangas.jpg'
-import comicsImage from '../assets/categories/comics.jpg'
+import comicsImage from '../assets/categories/comics_cooming_soon.png'
 import booksImage from '../assets/categories/books.jpg'
 import albumsImage from '../assets/categories/albums.jpg'
 
@@ -32,7 +32,9 @@ export const categoriesData = [
                 category: "movie",
                 imageUrl: `https://image.tmdb.org/t/p/w500${searchEntryItem.poster_path}`,
                 adult: searchEntryItem.adult,
-                imagePosterSuffix: searchEntryItem.poster_path
+                imagePosterSuffix: searchEntryItem.poster_path,
+                releaseDate: searchEntryItem.release_date,
+                author: ""
             }
             
             return mediaEntry
@@ -62,22 +64,16 @@ export const categoriesData = [
                 category: "tv-show",
                 imageUrl: `https://image.tmdb.org/t/p/w500${searchEntryItem.poster_path}`,
                 adult: searchEntryItem.adult,
-                imagePosterSuffix: searchEntryItem.poster_path
+                imagePosterSuffix: searchEntryItem.poster_path,
+                releaseDate: searchEntryItem.release_date,
+                author: ""
             }
             
             return mediaEntry
         },
     },
 
-    {
-        categoryName: "game",
-        categoryTitle: "Games",
-        categoryCoverImage: gamesImage,
-        pageLink: "games",
-        categoryBasedMessage: "played",
-        
-        
-    },
+    
 
     {
         categoryName: "anime",
@@ -103,7 +99,9 @@ export const categoriesData = [
                 category: "anime",
                 imageUrl: searchEntryItem.images.jpg.image_url,
                 adult: false,
-                imagePosterSuffix: searchEntryItem.images.jpg.image_url
+                imagePosterSuffix: searchEntryItem.images.jpg.image_url,
+                releaseDate: searchEntryItem.aired.string,
+                author: ""
             }
             
             return mediaEntry
@@ -135,38 +133,9 @@ export const categoriesData = [
                 category: "manga",
                 imageUrl: searchEntryItem.images.jpg.image_url,
                 adult: false,
-                imagePosterSuffix: searchEntryItem.images.jpg.image_url
-            }
-            
-            return mediaEntry
-        },
-    },
-
-    {
-        categoryName: "comic",
-        categoryTitle: "Comics",
-        categoryCoverImage: comicsImage,
-        pageLink: "",
-        categoryBasedMessage: "read",
-        querySearchPrefix: `https://comicvine.gamespot.com/api/search/?api_key=${import.meta.env.VITE_COMIC_API_KEY}&format=json&resources=volume&query=`,
-
-        headers: {
-            "accept": 'application/json',
-            "Content-Type": "application/json"
-        },
-
-        searchDataResultAdapter: function searchDataResultAdapter(searchEntryData) {
-            return searchEntryData.data
-        },
-
-        mediaEntryFromApiAdapter: function mediaEntryFromApiAdapter(searchEntryItem) {
-            const mediaEntry = {
-                apiMediaRecordId: searchEntryItem.mal_id,
-                title: searchEntryItem.title_english,
-                category: "mangas",
-                imageUrl: searchEntryItem.images.jpg.image_url,
-                adult: false,
-                imagePosterSuffix: searchEntryItem.images.jpg.image_url
+                imagePosterSuffix: searchEntryItem.images.jpg.image_url,
+                releaseDate: searchEntryItem.published.string,
+                author: searchEntryItem.authors[0].name
             }
             
             return mediaEntry
@@ -179,8 +148,31 @@ export const categoriesData = [
         categoryCoverImage: booksImage,
         pageLink: "books",
         categoryBasedMessage: "read",
-        posterImagePrefix: "book-",
-        apiKey: import.meta.env.VITE_BOOK_API_KEY
+        
+        querySearchPrefix: `https://openlibrary.org/search.json?title=`,
+
+        headers: {
+            "accept": 'application/json',
+        },
+
+        searchDataResultAdapter: function searchDataResultAdapter(searchEntryData) {
+            return searchEntryData.docs
+        },
+
+        mediaEntryFromApiAdapter: function mediaEntryFromApiAdapter(searchEntryItem) {
+            const mediaEntry = {
+                apiMediaRecordId: searchEntryItem.cover_i,
+                title: searchEntryItem.title,
+                category: "book",
+                imageUrl: `https://covers.openlibrary.org/b/id/${searchEntryItem.cover_i}-L.jpg` ,
+                adult: false,
+                imagePosterSuffix: searchEntryItem.cover_i,
+                releaseDate: `${searchEntryItem.first_publish_year}`,
+                author: "author_name" in searchEntryItem ? searchEntryItem.author_name[0] : ""
+            }
+            
+            return mediaEntry
+        },
     },
 
     {
@@ -206,7 +198,72 @@ export const categoriesData = [
                 category: "album",
                 imageUrl: searchEntryItem.image[3]['#text'],
                 adult: false,
-                imagePosterSuffix: searchEntryItem.image[3]['#text']
+                imagePosterSuffix: searchEntryItem.image[3]['#text'],
+                author: searchEntryItem.artist,
+                releaseDate: null
+            }
+            
+            return mediaEntry
+        },
+    },
+
+    {
+        categoryName: "game",
+        categoryTitle: "Games",
+        categoryCoverImage: gamesImage,
+        pageLink: "",
+        categoryBasedMessage: "played",
+        
+        querySearchPrefix: "https://api.rawg.io/api/games?search=",
+        headers: {
+            "accept": 'application/json',
+            "Authorization": `Bearer ${import.meta.env.VITE_GAME_API_KEY}`,
+            "Content-Type": "application/json"
+        },
+        
+        searchDataResultAdapter: function searchDataResultAdapter(searchEntryData) {
+            return searchEntryData.results
+        },
+
+        mediaEntryFromApiAdapter: function mediaEntryFromApiAdapter(searchEntryItem) {
+            const mediaEntry = {
+                apiMediaRecordId: searchEntryItem.id,
+                title: searchEntryItem.name,
+                category: "game",
+                imageUrl: `https://image.tmdb.org/t/p/w500${searchEntryItem.poster_path}`,
+                adult: searchEntryItem.adult,
+                imagePosterSuffix: searchEntryItem.poster_path
+            }
+            
+            return mediaEntry
+        }
+    },
+
+    {
+        categoryName: "comic",
+        categoryTitle: "Comics",
+        categoryCoverImage: comicsImage,
+        pageLink: "",
+        categoryBasedMessage: "read",
+        querySearchPrefix: `https://comicvine.gamespot.com/api/search/?api_key=${import.meta.env.VITE_COMIC_API_KEY}&format=json&resources=volume&query=`,
+
+        headers: {
+            "accept": 'application/json',
+            "Content-Type": "application/json"
+        },
+
+        searchDataResultAdapter: function searchDataResultAdapter(searchEntryData) {
+            return searchEntryData.data
+        },
+
+        mediaEntryFromApiAdapter: function mediaEntryFromApiAdapter(searchEntryItem) {
+            const mediaEntry = {
+                apiMediaRecordId: searchEntryItem.mal_id,
+                title: searchEntryItem.title_english,
+                category: "comic",
+                imageUrl: searchEntryItem.images.jpg.image_url,
+                adult: false,
+                imagePosterSuffix: searchEntryItem.images.jpg.image_url,
             }
             
             return mediaEntry
