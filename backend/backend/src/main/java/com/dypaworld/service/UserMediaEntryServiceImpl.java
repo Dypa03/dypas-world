@@ -8,6 +8,7 @@ import com.dypaworld.model.dto.UserMediaEntryDTO;
 import com.dypaworld.model.entity.UserMediaEntry;
 import com.dypaworld.model.entity.UserMediaEntryKey;
 import com.dypaworld.repository.UserMediaEntryRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dypaworld.model.entity.MediaEntry;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.dypaworld.model.entity.User;
 
 @Service
+@RequiredArgsConstructor
 public class UserMediaEntryServiceImpl implements UserMediaEntryService {
 
     @Autowired

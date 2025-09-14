@@ -2,7 +2,7 @@ import githubLogo from "../assets/github-logo.png"
 
 export default function Footer() {
     return (
-        <footer className="w-full h-16 bg-main-black text-n-white p-6">
+        <footer className="w-full h-footer bg-main-black text-n-white p-6">
           <div className="divider h-0.5 bg-gray-700 mx-auto"></div>
 
           <div className="footer-text text-base flex items-center justify-between ">

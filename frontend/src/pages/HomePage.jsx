@@ -31,7 +31,7 @@ export default function HomePage() {
     <>
       <Header />
       <main>
-        <div className="intro-section w-full h-section bg-main-color flex items-center justify-around">
+        <div className="intro-section w-full h-section bg-main-shade-color flex items-center justify-around">
 
           <div className="intro-text flex flex-col items-start justify-center text-left gap-5 ml-52">  
             <h1 className="text-8xl font-bold mt-10 ">

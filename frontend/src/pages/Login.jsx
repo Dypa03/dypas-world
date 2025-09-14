@@ -50,7 +50,7 @@ export default function Login() {
     return (
         <div className="login-page">
             <Header />
-            <main className="flex flex-col items-center justify-center bg-main-color h-section-with-footer w-full">
+            <main className="flex flex-col items-center justify-center bg-main-shade-color h-section-with-footer w-full">
                 <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 w-2/3">
                 
                     <div className="w-full bg-white rounded-2xl shadow dark:border mt-16 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">

@@ -64,7 +64,7 @@ module.exports = {
       },
       height: {
         'section': 'calc(100vh - 230px)',
-        'section-with-footer': 'calc(100vh - 105px)',
+        'section-with-footer': 'calc(100vh - 64px)',
         'header': '76px',
         'card': '301px'
       },

@@ -28,18 +28,17 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http, CustomOAuth2UserService customOAuth2UserService) throws Exception {
-
         http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests
-                                //.requestMatchers("/error", "/login").permitAll()
-                                .anyRequest().authenticated())
-                .oauth2Login(oauth2 ->
-                        oauth2
-                                .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                                .defaultSuccessUrl("http://localhost:5173", true))
-
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(authorizeRequests ->
+                    authorizeRequests
+                            .requestMatchers("/login").permitAll()
+                            .anyRequest().authenticated())
+            .oauth2Login(oauth2 ->
+                    oauth2
+                            .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                            .defaultSuccessUrl("http://localhost:5173", true))
+            .cors(Customizer.withDefaults());
                 /*.sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                         .maximumSessions(1)
@@ -52,11 +51,11 @@ public class SecurityConfig {
                 )*/
                 //.formLogin(flc -> flc.disable())
                 //.httpBasic(hbc -> hbc.disable())
-                .cors(Customizer.withDefaults());
-
 
         return http.build();
     }
+
+
 
 
     /*@Bean
