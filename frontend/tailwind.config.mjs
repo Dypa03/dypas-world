@@ -47,6 +47,15 @@ module.exports = {
     }
   },
   theme: {
+    screens: {
+      'xs': '360px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'header-text-show': '1090px',
+      'xl': '1280px',
+      '2xl': '1536px'
+    },
     extend: {
       colors: {
         'main-color': '#4738BF',
@@ -60,7 +69,8 @@ module.exports = {
       fontSize: {
         't-logo': '31px',
         'intro-font-size': '22px',
-        'card-title': '1.3rem'
+        'card-title': '1.3rem',
+        'small-header-title': '1.4rem'
       },
       height: {
         'section': 'calc(100vh - 230px)',

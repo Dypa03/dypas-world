@@ -36,7 +36,6 @@ public class MediaEntryController {
     @GetMapping(path = "/get-all-by-category-user")
     public List<UserMediaEntryDTO> getMediaEntryByUserAndCategory(@RequestParam("category") String category,
                                                                   @AuthenticationPrincipal OAuth2User principal) {
-
         return userMediaEntryService.getAllMediaEntriesByUserAndCategory(getUserFromPrincipal(principal).orElse(null), category);
     }
 
@@ -45,13 +44,6 @@ public class MediaEntryController {
                                            @AuthenticationPrincipal OAuth2User principal) {
         return userMediaEntryService.updateUserMediaEntry(userMediaEntryDTO, getUserFromPrincipal(principal).orElse(null));
     }
-
-    @GetMapping(path = "/get-all-by-user")
-    public List<MediaEntry> getMediaEntryByUserId(@AuthenticationPrincipal OAuth2User principal) {
-        return null;
-    }
-
-
 
     @PostMapping(path = "/delete/{id}")
     public boolean deleteMediaEntry(@PathVariable("id") Long id, @AuthenticationPrincipal OAuth2User principal) {

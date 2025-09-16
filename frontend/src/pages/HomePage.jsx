@@ -2,17 +2,17 @@
 import Header from "../myComponents/Header"
 import Footer from "../myComponents/Footer"
 import mainImage from '../assets/main-image.png'
+import Cookies from "js-cookie";
 
 import { categoriesData } from '../data/categoriesData'
 
 
-export default function HomePage() {
-
+export default function HomePage(props) {
 
   const categoriesCards = categoriesData.map((category, index) => {
     return (
       <div key={index} className="category-card hover:scale-105 transition-transform duration-300">
-        <a href={`/${category.pageLink.toLowerCase()}`}>
+        <a href={props.isUserLoggedIn ?  `/${category.pageLink.toLowerCase()}` : "/login"}>
           <img src={category.categoryCoverImage} alt={category.categoryName} 
           className="w-card h-card object-cover rounded-xl shadow-lg "
         />
@@ -40,7 +40,10 @@ export default function HomePage() {
             <p className="text-xl mt-4 text-thirdary-color">
               Within a few clicks, keep track of all the movies, shows, games, etc. <br /> that you enjoyed!
             </p>
-            <button className="w-52 h-16 text-intro-font-size font-semibold bg-black bg-opacity-30 rounded-lg">
+            <button onClick={() => {
+              return props.isUserLoggedIn ? window.location.href = '/#categories' : window.location.href = '/login'
+            }} 
+            className="w-52 h-16 text-intro-font-size font-semibold bg-black bg-opacity-30 rounded-lg">
               Get Started
             </button>
           </div>
@@ -50,7 +53,7 @@ export default function HomePage() {
           />
         </div>
 
-        <div className="categories-section w-full bg-n-white text-main-black  flex flex-col items-center justify-around">
+        <div id="categories" className="categories-section w-full bg-n-white text-main-black  flex flex-col items-center justify-around">
           <h3 className="mt-14 font-bold text-5xl">
             All Categories
           </h3>

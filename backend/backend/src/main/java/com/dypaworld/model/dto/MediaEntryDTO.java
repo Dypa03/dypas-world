@@ -12,7 +12,7 @@ public class MediaEntryDTO {
     private String apiMediaRecordId;
     private String title;
     private String category;
-    private int rating;
+    private float rating;
     private String imageUrl;
     private String createdAt;
     private String releaseDate;

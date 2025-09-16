@@ -117,6 +117,7 @@ export default function MediaEntryPageComponent(props) {
                 })
                 setIsSearchFormShown(false);
                 setSearchFormMode('search');
+                setSearchResults([]);
                 loadUserEntryDataList();
             } else {
                 const errorData = await response.json()
@@ -212,8 +213,6 @@ export default function MediaEntryPageComponent(props) {
         }
     }
 
-    
-
     useEffect(() => {
         loadUserEntryDataList();
     }, []);
@@ -237,7 +236,7 @@ export default function MediaEntryPageComponent(props) {
                             //console.log(searchEntryItem),
 
                             searchEntryItem = props.mediaEntryFromApiAdapter(searchEntryItem),
-                            //console.log(searchEntryItem),
+                            console.log(searchEntryItem.apiMediaRecordId),
 
                             [null, ""].includes(searchEntryItem.imagePosterSuffix) || searchEntryItem.adult || [null, ""].includes(searchEntryItem.apiMediaRecordId) ? null :
                                 <div key={searchEntryItem.apiMediaRecordId}
@@ -288,9 +287,6 @@ export default function MediaEntryPageComponent(props) {
             </div>
         </form>
 
-    
-
-
     const saveMediaEntryForm = 
         <div>
             <i  onClick={() => setSearchFormMode("search")}
@@ -301,8 +297,7 @@ export default function MediaEntryPageComponent(props) {
         }}
             className=" p-6 rounded-lg flex flex-col gap-3 justify-center items-center"
         >
-                
-
+            
                 <img 
                     className="rounded-3xl w-[240px] h-[360px] object-cover"
                     src={newMediaEntryData.imageUrl} alt="" />
@@ -311,8 +306,9 @@ export default function MediaEntryPageComponent(props) {
                 
                 <span className="flex items-center gap-1 mt text-xl">
                     
-                    <input type="text" id="rating" name="rating" value={newMediaEntryData.rating} onChange={handleNewMediaEntryRatingChange} 
-                    className="w-[45px] h-[40px] outline-none bg-black bg-opacity-40 rounded-md pl-4 "/> 
+                    <input type="number" id="rating" name="rating" value={newMediaEntryData.rating} min="0" max="10" required step="0.1"
+                    onChange={handleNewMediaEntryRatingChange} 
+                    className="w-[45px] h-[40px] outline-none bg-black bg-opacity-40 rounded-md text-center "/> 
                     <p>/ 10</p> 
                     <svg className="inline"
                      width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -344,8 +340,8 @@ export default function MediaEntryPageComponent(props) {
                 
                 <span className="flex items-center gap-1 mt text-xl">
                     
-                    <input type="text" id="rating" name="rating" value={mediaEntryToEdit.rating} onChange={handleMediaEntryToEditRatingChange} 
-                    className="w-[45px] h-[40px] outline-none bg-black bg-opacity-40 rounded-md pl-4 "/> 
+                    <input type="number" id="rating" name="rating" value={mediaEntryToEdit.rating} onChange={handleMediaEntryToEditRatingChange} min={0} max={10} step={0.1}
+                    className="w-[45px] h-[40px] outline-none bg-black bg-opacity-40 rounded-md text-center "/> 
                     <p>/ 10</p> 
                     <svg className="inline"
                      width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -400,7 +396,7 @@ export default function MediaEntryPageComponent(props) {
         <div>
             
             <Header/>
-            <div className="bg-main-shade-color min-h-screen py-20 px-80">
+            <div className="bg-main-shade-color min-h-screen py-20 px-52">
 
 
                 <div className="welcome-message flex flex-col gap-3 items-center mt-16">
@@ -417,12 +413,12 @@ export default function MediaEntryPageComponent(props) {
                     </button>
                 </div>
 
-                <div className="grid grid-cols-4 gap-12 mt-10">
+                <div className="grid grid-cols-5 gap-12 mt-10">
                 { userMediaEntriesList.length > 0 ? (
                     userMediaEntriesList.map((mediaItem) => (
-                        <div 
+                        <div key={mediaItem.mediaEntryId}
                             onClick={() => {
-                                console.log(mediaItem);
+                                console.log(mediaItem.mediaEntryId);
                                 setIsSearchFormShown(true);
                                 setSearchFormMode("edit");
                                 setMediaEntryToEdit({
@@ -432,7 +428,7 @@ export default function MediaEntryPageComponent(props) {
                                     rating: mediaItem.rating
                                 });
                             }}>
-                            <MediaEntryCard key={mediaItem.id} mediaItem={mediaItem} />
+                            <MediaEntryCard mediaItem={mediaItem} />
                         </div>
                     ))
                 ) : (

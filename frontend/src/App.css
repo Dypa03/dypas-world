@@ -41,6 +41,7 @@ body {
   background-color: var(--n-white);
   color: var(--n-white);
 
+  min-width: 375px;
   line-height: 1.4;
   font-size: 16px;
   width: 100%;
@@ -51,6 +52,13 @@ body {
 
 header {
   box-shadow: 0 20px 40px rgba(32, 14, 134, 0.29), 0 5px 10px rgba(124, 124, 124, 0.26);
+}
+
+.home-button {
+  box-shadow: 
+  0 20px 40px rgba(251, 159, 23, 0.29), 
+  0 5px 10px rgba(251, 159, 53, 0.26);
+
 }
 
 .login-button {
@@ -73,4 +81,15 @@ header {
 
   z-index: 1;
   overflow: hidden;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }

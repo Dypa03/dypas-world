@@ -13,12 +13,12 @@ public class UserMediaEntryDTO {
     Long mediaEntryId;
     String title;
     String imageUrl;
-    int rating;
+    float rating;
     String releaseDate;
     String author;
 
     // Constructor for updating rating
-    public UserMediaEntryDTO(Long mediaEntryId, int rating) {
+    public UserMediaEntryDTO(Long mediaEntryId, float rating) {
         this.mediaEntryId = mediaEntryId;
         this.rating = rating;
     }

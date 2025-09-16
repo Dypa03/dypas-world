@@ -27,6 +27,6 @@ public class UserMediaEntry {
     @JoinColumn(name = "media_entry_id")
     private MediaEntry mediaEntry;
 
-    int rating;
+    float rating;
 
 }
