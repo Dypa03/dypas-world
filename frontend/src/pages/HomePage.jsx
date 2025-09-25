@@ -11,10 +11,10 @@ export default function HomePage(props) {
 
   const categoriesCards = categoriesData.map((category, index) => {
     return (
-      <div key={index} className="category-card hover:scale-105 transition-transform duration-300">
+      <div key={index} className="category-card sm:w-card w-[300px] hover:scale-105 transition-transform duration-300">
         <a href={props.isUserLoggedIn ?  `/${category.pageLink.toLowerCase()}` : "/login"}>
           <img src={category.categoryCoverImage} alt={category.categoryName} 
-          className="w-card h-card object-cover rounded-xl shadow-lg "
+          className="w-full h-card object-cover rounded-xl shadow-lg "
         />
         <h4 className="text-3xl font-bold text-center mt-5 hover:text-secondary-color hover:underline">
           {category.categoryTitle}</h4>
@@ -31,25 +31,25 @@ export default function HomePage(props) {
     <>
       <Header />
       <main>
-        <div className="intro-section w-full h-section bg-main-shade-color flex items-center justify-around">
+        <div className="intro-section w-full sm:h-section h-[70vh] bg-main-shade-color flex items-center justify-around">
 
-          <div className="intro-text flex flex-col items-start justify-center text-left gap-5 ml-52">  
-            <h1 className="text-8xl font-bold mt-10 ">
+          <div className="intro-text flex flex-col items-center sm:items-start justify-center text-center sm:text-left gap-6 sm:gap-4 xl:ml-52 lg:ml-40 md:ml-24 sm:ml-12 xl:max-w-[500px] lg:max-w-[400px] md:max-w-[250px] sm:max-w-[200px] w-4/5">  
+            <h1 className="xl:text-8xl lg:text-7xl md:text-6xl sm:text-4xl text-6xl font-bold mt-10 ">
               Track Your <br /> Hobbies!
             </h1>
             <p className="text-xl mt-4 text-thirdary-color">
-              Within a few clicks, keep track of all the movies, shows, games, etc. <br /> that you enjoyed!
+              Within a few clicks, keep track of all the movies, shows, games, etc. that you enjoyed!
             </p>
             <button onClick={() => {
               return props.isUserLoggedIn ? window.location.href = '/#categories' : window.location.href = '/login'
             }} 
-            className="w-52 h-16 text-intro-font-size font-semibold bg-black bg-opacity-30 rounded-lg">
+            className="xl:w-52 md:w-40 sm:w-32 w-52 h-16 xl:text-intro-font-size md:text-xl sm:text-base font-semibold text-intro-font-size bg-black bg-opacity-30 rounded-lg">
               Get Started
             </button>
           </div>
 
           <img src={mainImage} alt="poyo" 
-            className="w-2/5 mt-16 main-image z-10"
+            className="w-2/5 min-w-[400px] mt-16 main-image z-10 hidden sm:block"
           />
         </div>
 
@@ -57,7 +57,7 @@ export default function HomePage(props) {
           <h3 className="mt-14 font-bold text-5xl">
             All Categories
           </h3>
-          <div className="categories grid grid-cols-4 gap-10 my-14">
+          <div className="categories md:grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 flex flex-col items-center sm:gap-10 gap-16 my-14">
             {categoriesCards}
           </div>
 

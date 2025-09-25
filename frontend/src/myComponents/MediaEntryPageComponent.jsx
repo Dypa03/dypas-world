@@ -396,7 +396,7 @@ export default function MediaEntryPageComponent(props) {
         <div>
             
             <Header/>
-            <div className="bg-main-shade-color min-h-screen py-20 px-52">
+            <div className="bg-main-shade-color min-h-screen py-20 flex flex-col items-center">
 
 
                 <div className="welcome-message flex flex-col gap-3 items-center mt-16">
@@ -413,7 +413,7 @@ export default function MediaEntryPageComponent(props) {
                     </button>
                 </div>
 
-                <div className="grid grid-cols-5 gap-12 mt-10">
+                <div className="w-5/6 md:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 flex flex-col items-center gap-16 mt-10">
                 { userMediaEntriesList.length > 0 ? (
                     userMediaEntriesList.map((mediaItem) => (
                         <div key={mediaItem.mediaEntryId}

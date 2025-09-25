@@ -34,11 +34,11 @@ export default function Header() {
                     <img src={logo} alt='Wizard Logo' 
                     className='h-12 inline' />
                         {isScreenMobile ? null :
-                            <div className='flex flex-col items-start justify-center ml-2 2xl:text-t-logo font-bold 
+                            <div className='flex items-start justify-center ml-2 2xl:text-t-logo font-bold 
                                 sm:text-3xl  text-small-header-title'>
                                 <span className='text-main-color'>
                                     Your Magic</span>
-                                <span className='text-secondary-color'>
+                                <span className='text-secondary-color ml-2'>
                                     World</span>
                             </div>}
                 </div>
