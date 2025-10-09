@@ -12,15 +12,16 @@ import lombok.Setter;
 @Setter
 public class UserDTO {
     private Long id;
-    private String name;
+    private String username;
     private String email;
     private String password;
 
-    // Constructor for user registration
-    public UserDTO(String name, String email, String password) {
-        this.name = name;
+    // Constructor for user registration and login
+    public UserDTO(String username, String email, String password) {
+        this.username = username;
         this.email = email;
         this.password = password;
+        
     }
 
     // Constructor for user login

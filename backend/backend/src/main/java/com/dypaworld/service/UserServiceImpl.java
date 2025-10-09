@@ -3,6 +3,7 @@ package com.dypaworld.service;
 import com.dypaworld.model.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.dypaworld.model.entity.User;
@@ -17,17 +18,20 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     @Override
     public User registerUser(UserDTO userDTO) {
         if (userDTO == null) {
             throw new IllegalArgumentException("UserDTO cannot be null");
         }
-        String name = userDTO.getName();
+        String username = userDTO.getUsername();
         String email = userDTO.getEmail();
         String password = userDTO.getPassword();
 
-        if (name == null || email == null || password == null) {
+        if (username == null || email == null || password == null) {
             throw new IllegalArgumentException("Username, email, and password cannot be null");
         }
 
@@ -35,11 +39,17 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Email already exists");
         }
 
-        if (userRepository.existsByName(name)) {
+        if (userRepository.existsByUsername(username)) {
             throw new IllegalArgumentException("Username already exists");
         }
 
-        User newUser = new User(name, email, password);
+        User newUser = new User();
+        newUser.setUsername(username);
+        newUser.setEmail(email);
+        newUser.setPassword(password);
+        newUser.setRole("USER");
+
+        System.out.println(newUser);
         return userRepository.save(newUser);
     }
 
@@ -49,29 +59,43 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("UserDTO cannot be null");
         }
         String email = userDTO.getEmail();
+        String username = userDTO.getUsername();
         String password = userDTO.getPassword();
 
-        if (email == null || password == null) {
-            throw new IllegalArgumentException("Email and password cannot be null");
+        if (password == null) {
+            throw new IllegalArgumentException("Password cannot be null");
         }
 
-        Optional<User> user = userRepository.findByEmail(email);
-        if (user.isEmpty()) {
-            throw new IllegalArgumentException("User not found with the provided email");
+        Optional<User> user;
+        if (email == null) {
+            user = userRepository.findByUsername(username);
         } else {
-            if (user.get().getPassword().equals(password)) {
-                return true;
-            } else {
-                throw new IllegalArgumentException("Incorrect password");
-            }
+            user = userRepository.findByEmail(email);
         }
+
+        if (user.isEmpty()) {
+            throw new IllegalArgumentException("User not found with the provided email or username");
+        }
+        return passwordEncoder.matches(password, user.get().getPassword());
     }
 
 
     @Override
     public User updateUserDetails(UserDTO userDTO) {
-        // TODO: Implement the logic to update user details
-        return null;
+        if (userDTO == null) {
+            throw new IllegalArgumentException("UserDTO cannot be null");
+        }
+        String name = userDTO.getUsername();
+        String email = userDTO.getEmail();
+        String password = userDTO.getPassword();
+        Optional<User> user = userRepository.findByUsername(name);
+
+        if (user.isEmpty()) {
+            throw new IllegalArgumentException("User not found with the provided username");
+        }
+        user.get().setPassword(userDTO.getPassword());
+
+        return userRepository.save(user.get());
     }
 
     // deleteUser method to remove a user from the system

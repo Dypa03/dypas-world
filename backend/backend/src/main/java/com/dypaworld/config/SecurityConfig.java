@@ -1,9 +1,12 @@
 // backend/src/main/java/com/dypaworld/SecurityConfig.java
 package com.dypaworld.config;
 
+import com.dypaworld.exceptionhandling.CustomAccessDeniedHandler;
+import com.dypaworld.exceptionhandling.CustomBasicAuthenticationEntryPoint;
 import com.dypaworld.service.CustomOAuth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -24,21 +27,21 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@Profile("!prod")
 public class SecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http, CustomOAuth2UserService customOAuth2UserService) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(authorizeRequests ->
+            .authorizeHttpRequests((authorizeRequests) ->
                     authorizeRequests
-                            .requestMatchers("/login", "api/user/user-info").permitAll()
+                            .requestMatchers("/login", "/api/user/user-info", "/api/user/login", "/api/user/register", "/error").permitAll()
                             .anyRequest().authenticated())
-            .oauth2Login(oauth2 ->
-                    oauth2
-                            .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                            .defaultSuccessUrl("http://localhost:5173", true))
             .cors(Customizer.withDefaults());
+        http.formLogin(Customizer.withDefaults());
+        http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
+        http.exceptionHandling(ehc -> ehc.accessDeniedHandler(new CustomAccessDeniedHandler()).accessDeniedPage("/denied"));
                 /*.sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                         .maximumSessions(1)
@@ -64,11 +67,11 @@ public class SecurityConfig {
         UserDetails admin = User.withUsername("admin").password("$2a$12$qzv/7/LEPqbA4ryXSh6f2eInJ0Uoo40EO0DqcJ9uV5afHymg2d3UC").authorities("admin").build();
         return new InMemoryUserDetailsManager(user, admin);
     }*/
-/*
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }*/
+    }
 
     /*
     @Bean

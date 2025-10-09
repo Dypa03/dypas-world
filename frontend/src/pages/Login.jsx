@@ -8,6 +8,7 @@ import OAuthLogin from "../myComponents/OAuthLogin";
 export default function Login() {
     const [formData, setFormData] = useState({
         email: '',
+        username: '',
         password: ''
     });
 
@@ -22,7 +23,7 @@ export default function Login() {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:8080/api/user/login", {
+            const response = await fetch("http://localhost:8080/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -31,6 +32,8 @@ export default function Login() {
                 body: JSON.stringify(formData)
             });
 
+
+            
             if (response.ok) {
                 // TODO: make it actually work lmao
                 alert("login successful!")
@@ -60,14 +63,21 @@ export default function Login() {
                             </h1>
                             <form className="space-y-4 md:space-y-6"  onSubmit={handleSubmit}>
                                 <div>
-                                    <label for="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
+                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
                                     <input type="email" name="email" id="email" 
                                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="kirbo@poyo.com" 
-                                    value={formData.email} onChange={handleChange} required/>
+                                    value={formData.email} onChange={handleChange} />
                                 </div>
 
                                 <div>
-                                    <label for="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                                    <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your username</label>
+                                    <input type="text" name="username" id="username" 
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="kirbo@poyo.com" 
+                                    value={formData.username} onChange={handleChange} required/>
+                                </div>
+
+                                <div>
+                                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                                     <input type="password" name="password" id="password" placeholder="••••••••" 
                                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     value={formData.password} onChange={handleChange} required/>
@@ -80,7 +90,7 @@ export default function Login() {
                                             className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" required=""/>
                                         </div>
                                         <div className="ml-3 text-sm">
-                                            <label for="remember" className="text-gray-500 dark:text-gray-300">Remember me</label>
+                                            <label htmlFor="remember" className="text-gray-500 dark:text-gray-300">Remember me</label>
                                         </div>
                                     </div>
                                     <a href="#" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</a>

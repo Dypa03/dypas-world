@@ -1,11 +1,10 @@
 package com.dypaworld.model.entity;
 
-import java.security.AuthProvider;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
@@ -16,15 +15,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Entity;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 
 @Entity
 @Table(name = "users")
@@ -35,12 +30,14 @@ public class User {
     private Long id;
 
     @Column(unique = true)
-    private String name;
+    private String username;
 
     @Column(unique = true, nullable = false)
     private String email;
 
     private String password;
+
+    private String role;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
@@ -52,8 +49,8 @@ public class User {
 
 
     // Additional constructor for user registration
-    public User(String name, String email, String password) {
-        this.name = name;
+    public User(String username, String email, String password) {
+        this.username = username;
         this.email = email;
         this.password = password;
     }

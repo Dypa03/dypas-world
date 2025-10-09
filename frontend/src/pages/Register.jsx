@@ -20,7 +20,7 @@ export default function Register() {
         event.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:8080/api/user/add", {
+            const response = await fetch("http://localhost:8080/api/user/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -45,7 +45,7 @@ export default function Register() {
     return (
         <div className="register-page">
             <Header />
-            <main>
+            <main className="flex flex-col items-center justify-center h-screen bg-main-color text-main-black">
                 <h1>Register Page</h1>
                 <form onSubmit={handleSubmit}>
                     <div>

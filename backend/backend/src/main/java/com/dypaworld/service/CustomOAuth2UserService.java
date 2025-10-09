@@ -18,18 +18,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        System.out.println("Madison give me the life support I need");
         OAuth2User oAuth2User = new DefaultOAuth2UserService().loadUser(userRequest);
-
-        System.out.println("ATTRIBUTI: " + oAuth2User.getAttributes());
-
         String email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("name");
 
         userRepository.findByEmail(email).orElseGet(() -> {
             User newUser = new User();
             newUser.setEmail(email);
-            newUser.setName(name);
+            newUser.setUsername(name);
             return userRepository.save(newUser);
         });
 
