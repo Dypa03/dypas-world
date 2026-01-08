@@ -10,23 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserDTO {
-    private Long id;
+public class UserRegistrationDTO {
     private String username;
     private String email;
     private String password;
-
-    // Constructor for user registration and login
-    public UserDTO(String username, String email, String password) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        
-    }
-
-    // Constructor for user login
-    public UserDTO(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
 }

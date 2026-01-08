@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from "react";
 
-export default function Header() {
+export default function Header(props) {
     let smallScreenSize = 1280;
     let mobileScreenSize = 640;
     const [isScreenSmall, setIsScreenSmall] = useState(window.innerWidth < smallScreenSize);
@@ -68,11 +68,20 @@ export default function Header() {
                             {isScreenMobile ? null : isScreenSmall ? 'Home' : 'Homepage'}
                     </button>
                     
-                    <button className='login-button w-[45px] sm:w-1/2 text-center font-bold text-main-color p-2 rounded-lg bg-main-white hover:bg-main-color hover:text-main-white  transition duration-300'
-                    onClick={()=> navigate('/login')}>
-                            <i className='fa fa-user'></i>
-                            {isScreenMobile ? null : 'Login'}
-                    </button>
+                    {props.isUserLoggedin ? 
+                        <button className='logout-button w-[45px] sm:w-1/2 text-center font-bold text-main-color p-2 rounded-lg bg-main-white hover:bg-main-color hover:text-main-white  transition duration-300'
+                        onClick={()=> navigate('/')}>
+                                <i className='fa fa-user'></i>
+                                {isScreenMobile ? null : 'Logout'}
+                        </button>
+                        :
+                        <button className='login-button w-[45px] sm:w-1/2 text-center font-bold text-main-color p-2 rounded-lg bg-main-white hover:bg-main-color hover:text-main-white  transition duration-300'
+                        onClick={()=> navigate('/login')}>
+                                <i className='fa fa-user mr-1'></i>
+                                {isScreenMobile ? null : 'Login'}
+                        </button>
+                    }
+                    
                     
                 </div>
             

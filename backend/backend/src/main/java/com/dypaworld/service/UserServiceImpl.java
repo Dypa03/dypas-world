@@ -1,7 +1,6 @@
 package com.dypaworld.service;
 
-import com.dypaworld.model.dto.UserDTO;
-import lombok.RequiredArgsConstructor;
+import com.dypaworld.model.dto.UserRegistrationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,6 @@ import com.dypaworld.repository.UserRepository;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -23,13 +21,13 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User registerUser(UserDTO userDTO) {
-        if (userDTO == null) {
+    public User registerUser(UserRegistrationDTO userRegistrationDTO) {
+        if (userRegistrationDTO == null) {
             throw new IllegalArgumentException("UserDTO cannot be null");
         }
-        String username = userDTO.getUsername();
-        String email = userDTO.getEmail();
-        String password = userDTO.getPassword();
+        String username = userRegistrationDTO.getUsername();
+        String email = userRegistrationDTO.getEmail();
+        String password = userRegistrationDTO.getPassword();
 
         if (username == null || email == null || password == null) {
             throw new IllegalArgumentException("Username, email, and password cannot be null");
@@ -54,13 +52,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean loginUser(UserDTO userDTO) {
-        if (userDTO == null) {
+    public boolean loginUser(UserRegistrationDTO userRegistrationDTO) {
+        if (userRegistrationDTO == null) {
             throw new IllegalArgumentException("UserDTO cannot be null");
         }
-        String email = userDTO.getEmail();
-        String username = userDTO.getUsername();
-        String password = userDTO.getPassword();
+        String email = userRegistrationDTO.getEmail();
+        String username = userRegistrationDTO.getUsername();
+        String password = userRegistrationDTO.getPassword();
 
         if (password == null) {
             throw new IllegalArgumentException("Password cannot be null");
@@ -76,24 +74,27 @@ public class UserServiceImpl implements UserService {
         if (user.isEmpty()) {
             throw new IllegalArgumentException("User not found with the provided email or username");
         }
-        return passwordEncoder.matches(password, user.get().getPassword());
+
+
+
+        return true;
     }
 
 
     @Override
-    public User updateUserDetails(UserDTO userDTO) {
-        if (userDTO == null) {
+    public User updateUserDetails(UserRegistrationDTO userRegistrationDTO) {
+        if (userRegistrationDTO == null) {
             throw new IllegalArgumentException("UserDTO cannot be null");
         }
-        String name = userDTO.getUsername();
-        String email = userDTO.getEmail();
-        String password = userDTO.getPassword();
+        String name = userRegistrationDTO.getUsername();
+        String email = userRegistrationDTO.getEmail();
+        String password = userRegistrationDTO.getPassword();
         Optional<User> user = userRepository.findByUsername(name);
 
         if (user.isEmpty()) {
             throw new IllegalArgumentException("User not found with the provided username");
         }
-        user.get().setPassword(userDTO.getPassword());
+        user.get().setPassword(userRegistrationDTO.getPassword());
 
         return userRepository.save(user.get());
     }

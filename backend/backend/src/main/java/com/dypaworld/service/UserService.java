@@ -1,15 +1,15 @@
 package com.dypaworld.service;
 
-import com.dypaworld.model.dto.UserDTO;
+import com.dypaworld.model.dto.UserRegistrationDTO;
 import com.dypaworld.model.entity.User;
 
 
 public interface UserService {
-    User registerUser(UserDTO userDTO);
+    User registerUser(UserRegistrationDTO userRegistrationDTO);
     
-    boolean loginUser(UserDTO userDTO);
+    boolean loginUser(UserRegistrationDTO userRegistrationDTO);
 
-    User updateUserDetails(UserDTO userDTO);
+    User updateUserDetails(UserRegistrationDTO userRegistrationDTO);
 
     boolean deleteUser(Long userId);
 

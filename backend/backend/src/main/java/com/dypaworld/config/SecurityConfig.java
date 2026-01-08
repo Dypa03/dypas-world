@@ -33,13 +33,13 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http, CustomOAuth2UserService customOAuth2UserService) throws Exception {
         http
+            .sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession"))
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests((authorizeRequests) ->
                     authorizeRequests
                             .requestMatchers("/login", "/api/user/user-info", "/api/user/login", "/api/user/register", "/error").permitAll()
-                            .anyRequest().authenticated())
+                            .requestMatchers("/api/media-entry/add", "/api/media-entry/delete").authenticated())
             .cors(Customizer.withDefaults());
-        http.formLogin(Customizer.withDefaults());
         http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
         http.exceptionHandling(ehc -> ehc.accessDeniedHandler(new CustomAccessDeniedHandler()).accessDeniedPage("/denied"));
                 /*.sessionManagement(session -> session

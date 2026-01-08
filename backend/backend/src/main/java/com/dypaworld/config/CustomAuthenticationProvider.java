@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("!prod")
+@Profile("prod")
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
@@ -26,8 +26,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
-        return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
-
+        if (passwordEncoder.matches(password, userDetails.getPassword())) {
+            return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
+        } else {
+            throw new BadCredentialsException("Invalid password");
+        }
     }
 
     @Override
