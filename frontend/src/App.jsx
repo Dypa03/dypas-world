@@ -31,11 +31,11 @@ function App() {
     });
   }, []);
 
-  const categoryRoutes = categoriesData.map((category) => (
+  const categoryRoutes = categoriesData.map((categoryObject) => (
     <Route
-      key={category.categoryName}
-      path={`/${category.pageLink}`}
-      element={<MediaEntryPageComponent category={category} />}
+      key={categoryObject.categoryName}
+      path={`/${categoryObject.pageLink}`}
+      element={<MediaEntryPageComponent categoryObject={categoryObject} />}
     />
   ))
 

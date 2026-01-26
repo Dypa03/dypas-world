@@ -29,7 +29,7 @@ export default function HomePage(props) {
             
   return (
     <>
-      <Header isUserLoggedIn={props.isUserLoggedIn} />
+      <Header />
       <main>
         <div className="intro-section w-full sm:h-section h-[70vh] bg-main-shade-color flex items-center justify-around">
 

@@ -63,13 +63,13 @@ module.exports = {
         'thirdary-color': '#FECD1B',
         'footer-black': '#1a0033',
         'main-white': '#F0F0F0',
-        'main-black': '#141414',
-        'main-shade-color': '#5E00B4'
+        'main-black': '#101010',
+        'main-shade-color': '#5E00B4',
       },
       fontSize: {
         't-logo': '31px',
         'intro-font-size': '22px',
-        'card-title': '1.3rem',
+        'card-title': '1.2rem',
         'small-header-title': '1.4rem'
       },
       height: {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import MediaEntryCard from "./MediaEntryCard";
 import Header from "./Header"
 import Footer from "./Footer";
@@ -9,7 +9,7 @@ import ScrollToTopButton from "./ScrollToTopButton";
 
 export default function MediaEntryPageComponent(props) {
 
-    props = props.category
+    props = props.categoryObject
 
     const [userMediaEntriesList, setUserMediaEntriesList] = useState([]);
 
@@ -22,10 +22,10 @@ export default function MediaEntryPageComponent(props) {
     const [searchFormMode, setSearchFormMode] = useState('search');
         
     const [newMediaEntryData, setNewMediaEntryData] = useState({
-        apiMediaRecordId: 0,
+        apiMediaRecordId: null,
         title: '',
         category: '',
-        imageUrl: '',
+        imageUrl: null,
         releaseDate: '',
         author: '',
         rating: 0
@@ -38,14 +38,17 @@ export default function MediaEntryPageComponent(props) {
         rating: 0
     });
 
+    const fileUploadRef = useRef();
+
     const handleSearchFormDataChange = (e) => {
         setSearchFormData(e.target.value);
     };
 
-    const handleNewMediaEntryRatingChange = (e) => {
+    const handleNewMediaEntryInputChange = (e) => {
+        const name = e.target.name
         setNewMediaEntryData(prevFormData => ({
             ...prevFormData,
-            rating: e.target.value
+            [name]: e.target.value
         }));
     };
 
@@ -109,7 +112,7 @@ export default function MediaEntryPageComponent(props) {
 
             if (response.ok) {
                 setNewMediaEntryData({
-                    apiMediaRecordId: 0,
+                    apiMediaRecordId: null,
                     title: '',
                     category: '',
                     imageUrl: '',
@@ -213,6 +216,21 @@ export default function MediaEntryPageComponent(props) {
         }
     }
 
+    const handleCustomImageUpload = (event) => {
+        event.preventDefault();
+        fileUploadRef.current.click();
+
+    }
+
+    const uploadCustomImageDisplay = () => {
+        const uploadedFile = fileUploadRef.current.files[0];
+        const cachedURL = URL.createObjectURL(uploadedFile);
+        setNewMediaEntryData({
+            ...newMediaEntryData,
+            imageUrl: cachedURL
+        })
+    }
+
     useEffect(() => {
         loadUserEntryDataList();
     }, []);
@@ -307,7 +325,7 @@ export default function MediaEntryPageComponent(props) {
                 <span className="flex items-center gap-1 mt text-xl">
                     
                     <input type="number" id="rating" name="rating" value={newMediaEntryData.rating} min="0" max="10" required step="0.1"
-                    onChange={handleNewMediaEntryRatingChange} 
+                    onChange={handleNewMediaEntryInputChange} 
                     className="w-[45px] h-[40px] outline-none bg-black bg-opacity-40 rounded-md text-center "/> 
                     <p>/ 10</p> 
                     <svg className="inline"
@@ -368,6 +386,54 @@ export default function MediaEntryPageComponent(props) {
                 
         </form>
 
+    const addCustomMediaEntryForm = 
+        <div>
+            <form onSubmit={(e) => {
+                e.preventDefault();
+                handleNewMediaEntrySubmit();
+            }}
+                className=" p-6 rounded-lg flex flex-col gap-3 justify-center items-center"
+            >
+                    
+                    
+                    <img 
+                        onClick={handleCustomImageUpload}
+                        className="rounded-3xl w-[240px] h-[360px] object-cover"
+                        src={newMediaEntryData.imageUrl} alt="" />
+                    <input type="file" name="imageUrl" id="imageUrl" ref={fileUploadRef} onChange={uploadCustomImageDisplay} hidden />
+                    
+                    <label htmlFor="title">Title:</label>
+                    <input type="text" id="title" name="title" onChange={handleNewMediaEntryInputChange} />
+
+                    <label htmlFor="releaseDate">Release Date:</label>
+                    <input type="text" id="releaseDate" name="releaseDate" onChange={handleNewMediaEntryInputChange} />
+
+                    <label htmlFor="author">Author:</label>
+                    <input type="text" id="author" name="author" onChange={handleNewMediaEntryInputChange} />
+
+                    <label htmlFor="rating" className="text-xl font-bold mt-4">Insert your Rating:</label>
+                    
+                    <span className="flex items-center gap-1 mt text-xl">
+                        
+                        <input type="number" id="rating" name="rating" value={newMediaEntryData.rating} min="0" max="10" required step="0.1"
+                        onChange={handleNewMediaEntryInputChange} 
+                        className="w-[45px] h-[40px] outline-none bg-black bg-opacity-40 rounded-md text-center "/> 
+                        <p>/ 10</p> 
+                        <svg className="inline"
+                        width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"/>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" />
+                            <g id="SVGRepo_iconCarrier"> <path d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z" fill="#eab308"/> </g>
+                        </svg>
+                    </span>
+                    
+                    <button className="w-1/2 bg-main-color hover:bg-secondary-color text-white font-bold py-2 px-4 rounded-3xl focus:outline-none focus:shadow-outline mt-2"
+                    >Submit</button>
+        
+            </form>
+        </div>
+                        
+
     function handleFormShown() {
         if (searchFormMode == "search") {
             return (
@@ -380,6 +446,12 @@ export default function MediaEntryPageComponent(props) {
             return (
                 <div>
                     {saveMediaEntryForm}
+                </div>
+            )
+        } else if (searchFormMode == "addCustom") {
+            return (
+                <div>
+                    {addCustomMediaEntryForm}
                 </div>
             )
         } else if (searchFormMode == "edit") {
@@ -411,9 +483,19 @@ export default function MediaEntryPageComponent(props) {
                         className="text-white focus:outline-none focus:ring-4 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 bg-black bg-opacity-30 w-40">
                         Add New
                     </button>
+                    <button 
+                        onClick={() => {setIsSearchFormShown(true); 
+                                    setSearchFormMode("addCustom")
+                                    setNewMediaEntryData(prevNewMediaEntryData => ({
+                                        ...prevNewMediaEntryData,
+                                        category: props.categoryName
+                                    }))}}
+                        className="text-white focus:outline-none focus:ring-4 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 bg-black bg-opacity-30 w-40">
+                        Add Custom
+                    </button>
                 </div>
 
-                <div className="w-5/6 md:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 flex flex-col items-center gap-16 mt-10">
+                <div className="w-5/6 md:grid sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 flex flex-col items-center gap-16 mt-10">
                 { userMediaEntriesList.length > 0 ? (
                     userMediaEntriesList.map((mediaItem) => (
                         <div key={mediaItem.mediaEntryId}

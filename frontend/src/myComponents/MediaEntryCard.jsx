@@ -6,23 +6,23 @@ export default function MediaEntryCard({ mediaItem }) {
     return (
         
             
-            <div className="rounded-3xl flex flex-col w-[270px] pb-2 shadow-sm bg-white text-slate-900 hover:scale-105 hover:shadow-secondary-color hover:shadow-md  hover:cursor-pointer :hover: transition-transform duration-300 ">
+            <div className="rounded-3xl flex flex-col w-[250px] pb-2 shadow-sm bg-white text-slate-900 hover:scale-105 hover:shadow-secondary-color hover:shadow-md  hover:cursor-pointer :hover: transition-transform duration-300 ">
                 <img
                     src={mediaItem.imageUrl}
-                    className="h-[360px] flex-auto rounded-t-3xl justify-center w-full object-cover"
+                    className="h-[300px] flex-auto rounded-t-3xl justify-center w-full object-cover"
                     alt={mediaItem.title}
                     />  
 
-                <div className="group h-[100px] px-5 py-2 flex flex-col items-start justify-between z-10">
+                <div className="group h-2/5 px-5 pt-2 flex flex-col items-start justify-between z-10">
                     <div>
                         <h2
                         className=" font-bold md:text-card-title line-clamp-1"
                         >
                         {mediaItem.title}
                         </h2>
-                        <h3 className="text-main-shade-color font-bold text-base"
+                        <h3 className="text-main-shade-color font-bold text-sm"
                         >{mediaItem.author}</h3>
-                        <h3 className="text-gray-400 font-bold text-sm" 
+                        <h3 className="text-gray-400 font-bold text-sm mt-2" 
                         >{mediaItem.releaseDate}</h3>
                         
                     </div>

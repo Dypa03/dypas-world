@@ -2,6 +2,7 @@ import { useState } from "react";
 import Header from "../myComponents/Header";
 import Footer from "../myComponents/Footer";
 import OAuthLogin from "../myComponents/OAuthLogin";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -18,6 +19,8 @@ export default function Login() {
         }));
     };
 
+    const navigate = useNavigate();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -30,13 +33,9 @@ export default function Login() {
                 credentials: "include",
                 body: JSON.stringify(formData)
             },
-        );
-
-
-            
+        ); 
             if (response.ok) {
-                // TODO: make it actually work lmao
-                alert("login successful!")
+                navigate("/")
             } else {
                 const errorData = await response.json()
                 alert(`Error: ${errorData.message || "Failed to login user"}`);
@@ -91,7 +90,7 @@ export default function Login() {
                                 <button type="submit" className="w-full text-white bg-main-color hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
                                 <OAuthLogin />
                                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                                    Don’t have an account yet? <a href="#" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</a>
+                                    Don’t have an account yet? <a href="/register" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</a>
                                 </p>
                             </form>
                         </div>

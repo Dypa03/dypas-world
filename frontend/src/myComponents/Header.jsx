@@ -1,10 +1,10 @@
 import logo from '../assets/wizard-logo-rb.png';
 //import home from '../assets/home-icon.svg';
-import { useNavigate } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from "react";
 
-export default function Header(props) {
+export default function Header() {
     let smallScreenSize = 1280;
     let mobileScreenSize = 640;
     const [isScreenSmall, setIsScreenSmall] = useState(window.innerWidth < smallScreenSize);
@@ -22,9 +22,43 @@ export default function Header(props) {
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
-    
 
     const navigate = useNavigate();
+
+    const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+
+    async function checkIfLoggedIn() {
+        try {
+        const res = await fetch("http://localhost:8080/api/user/user-info", {
+            credentials: "include"
+        });
+        console.log(res);
+        return res.ok; 
+        } catch (err) {
+        console.error("Errore durante il check login:", err);
+        return false;
+        }
+    }
+
+    async function logout() {
+        try {
+        const res = await fetch("http://localhost:8080/logout", {
+            credentials: "include"
+        });
+        console.log(res);
+        navigate("/");
+        window.location.reload(false);
+        } catch (err) {
+        console.error("Errore durante il logout:", err);
+        }
+    }
+
+    useEffect(() => {
+        checkIfLoggedIn().then((loggedIn) => {
+        console.log("Utente loggato?", loggedIn);
+        setIsUserLoggedIn(loggedIn);
+        });
+    }, []);
 
     return (
         <header className='bg-main-white w-full sm:h-header h-16 flex items-center justify-between px-4 fixed top-0 left-0 z-40 
@@ -68,16 +102,16 @@ export default function Header(props) {
                             {isScreenMobile ? null : isScreenSmall ? 'Home' : 'Homepage'}
                     </button>
                     
-                    {props.isUserLoggedin ? 
+                    {isUserLoggedIn ? 
                         <button className='logout-button w-[45px] sm:w-1/2 text-center font-bold text-main-color p-2 rounded-lg bg-main-white hover:bg-main-color hover:text-main-white  transition duration-300'
-                        onClick={()=> navigate('/')}>
-                                <i className='fa fa-user'></i>
+                        onClick={logout}>
+                                <i className='fa fa-user pr-1'></i>
                                 {isScreenMobile ? null : 'Logout'}
                         </button>
                         :
                         <button className='login-button w-[45px] sm:w-1/2 text-center font-bold text-main-color p-2 rounded-lg bg-main-white hover:bg-main-color hover:text-main-white  transition duration-300'
                         onClick={()=> navigate('/login')}>
-                                <i className='fa fa-user mr-1'></i>
+                                <i className='fa fa-user pr-1'></i>
                                 {isScreenMobile ? null : 'Login'}
                         </button>
                     }
