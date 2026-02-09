@@ -32,11 +32,14 @@ public class MediaEntry {
     @Column(nullable = false)
     private String category;
 
+    @Column(columnDefinition = "TEXT")
     private String imageUrl;
 
     private String releaseDate;
 
     private String author;
+
+
 
     @OneToMany(mappedBy = "mediaEntry")
     @JsonIgnore

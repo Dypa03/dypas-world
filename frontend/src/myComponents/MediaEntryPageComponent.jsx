@@ -31,6 +31,8 @@ export default function MediaEntryPageComponent(props) {
         rating: 0
     });
 
+    const [previewImageUrl, setPreviewImageUrl] = useState(null);
+
     const [mediaEntryToEdit, setMediaEntryToEdit] = useState({
         mediaEntryId: 0,
         title: '',
@@ -39,6 +41,17 @@ export default function MediaEntryPageComponent(props) {
     });
 
     const fileUploadRef = useRef();
+
+    
+
+    function generatePassword(length) {
+        const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()';
+        let password = '';
+        for (let i = 0; i < length; i++) {
+            password += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return password;
+    }
 
     const handleSearchFormDataChange = (e) => {
         setSearchFormData(e.target.value);
@@ -80,7 +93,8 @@ export default function MediaEntryPageComponent(props) {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*"
+                    "Access-Control-Allow-Origin": "*",
+                    "Cross-Origin-Resource-Policy": "cross-origin"
             },
             credentials: "include"
             });
@@ -98,7 +112,9 @@ export default function MediaEntryPageComponent(props) {
         }
     }
 
-    const handleNewMediaEntrySubmit = async () => {
+    const handleNewMediaEntrySubmit = async (overrideData=null) => {
+        const dataToSubmit = overrideData || newMediaEntryData;
+
         try {
             const response = await fetch("http://localhost:8080/api/media-entry/add", {
                 method: "POST",
@@ -107,7 +123,7 @@ export default function MediaEntryPageComponent(props) {
                     "Access-Control-Allow-Origin": "*"
                 },
                 credentials: "include",
-                body: JSON.stringify(newMediaEntryData)                
+                body: JSON.stringify(dataToSubmit)                
             });
 
             if (response.ok) {
@@ -118,6 +134,7 @@ export default function MediaEntryPageComponent(props) {
                     imageUrl: '',
                     rating: 0
                 })
+                setPreviewImageUrl(null);
                 setIsSearchFormShown(false);
                 setSearchFormMode('search');
                 setSearchResults([]);
@@ -133,6 +150,34 @@ export default function MediaEntryPageComponent(props) {
         }
 
     };
+
+    const handleNewCustomMediaEntrySubmit = async() => {
+        const uploadedFile = fileUploadRef.current.files[0];
+
+        try {
+            const formData = new FormData();
+            formData.append("file", uploadedFile)
+
+            const response = await fetch("http://localhost:8080/s3/upload", {
+                method: "post",
+                body: formData
+            })
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Uploaded:", data);
+
+                const finalData = ({
+                    ...newMediaEntryData,
+                    imageUrl: data.url
+                })
+                handleNewMediaEntrySubmit(finalData)
+            }
+            console.log(response)
+        } catch(error) {
+            console.error(error);
+        }
+    }
 
     const handleMediaEntryToEditSubmit = async () => {
         try {
@@ -176,7 +221,6 @@ export default function MediaEntryPageComponent(props) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*"
             },
             credentials: "include"
         }
@@ -222,13 +266,15 @@ export default function MediaEntryPageComponent(props) {
 
     }
 
-    const uploadCustomImageDisplay = () => {
+    const uploadCustomImageDisplay = async () => {
         const uploadedFile = fileUploadRef.current.files[0];
-        const cachedURL = URL.createObjectURL(uploadedFile);
-        setNewMediaEntryData({
-            ...newMediaEntryData,
-            imageUrl: cachedURL
-        })
+
+        if (uploadedFile) {
+            const cachedURL = URL.createObjectURL(uploadedFile);
+            setPreviewImageUrl(cachedURL);
+        }
+        
+        
     }
 
     useEffect(() => {
@@ -390,7 +436,8 @@ export default function MediaEntryPageComponent(props) {
         <div>
             <form onSubmit={(e) => {
                 e.preventDefault();
-                handleNewMediaEntrySubmit();
+
+                handleNewCustomMediaEntrySubmit();
             }}
                 className=" p-6 rounded-lg flex flex-col gap-3 justify-center items-center"
             >
@@ -399,7 +446,7 @@ export default function MediaEntryPageComponent(props) {
                     <img 
                         onClick={handleCustomImageUpload}
                         className="rounded-3xl w-[240px] h-[360px] object-cover"
-                        src={newMediaEntryData.imageUrl} alt="" />
+                        src={previewImageUrl} alt="" />
                     <input type="file" name="imageUrl" id="imageUrl" ref={fileUploadRef} onChange={uploadCustomImageDisplay} hidden />
                     
                     <label htmlFor="title">Title:</label>
@@ -488,7 +535,8 @@ export default function MediaEntryPageComponent(props) {
                                     setSearchFormMode("addCustom")
                                     setNewMediaEntryData(prevNewMediaEntryData => ({
                                         ...prevNewMediaEntryData,
-                                        category: props.categoryName
+                                        category: props.categoryName,
+                                        apiMediaRecordId: generatePassword(32)
                                     }))}}
                         className="text-white focus:outline-none focus:ring-4 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 bg-black bg-opacity-30 w-40">
                         Add Custom
@@ -526,6 +574,7 @@ export default function MediaEntryPageComponent(props) {
 
                             <svg className="w-6 h-6 text-gray-700 dark:text-white fixed top-[18%] right-[26%] z-50 hover:cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"
                                 onClick={() => {
+                                    setPreviewImageUrl(null);
                                     setIsSearchFormShown(false) 
                                     setSearchFormMode("search")
                                     }}>

@@ -38,7 +38,7 @@ public class SecurityProdConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorizeRequests ->
                     authorizeRequests
-                            .requestMatchers("/login", "/api/user/user-info", "/api/user/login", "/api/user/register", "/error").permitAll()
+                            .requestMatchers("/login", "/api/user/user-info", "/api/user/login", "/api/user/register", "/error", "/s3/upload").permitAll()
                             .anyRequest().authenticated())
             .oauth2Login(oauth2 ->
                     oauth2
