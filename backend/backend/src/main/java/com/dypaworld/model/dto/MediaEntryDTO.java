@@ -1,37 +1,31 @@
 package com.dypaworld.model.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class MediaEntryDTO {
-    private Integer id;
-    private UserDTO user;
+    private Long id;
+    private String apiMediaRecordId;
     private String title;
     private String category;
-    private int rating;
-    private String text;
+    private float rating;
+    private String imageUrl;
     private String createdAt;
+    private String releaseDate;
+    private String author;
 
     // Constructor for media entry creation
-    public MediaEntryDTO(UserDTO user, String title, String category, int rating, String text) {
-        this.user = user;
+    public MediaEntryDTO(String title, String category, String imageUrl, String apiMediaRecordId, int rating, String releaseDate, String author) {
+        this.apiMediaRecordId = apiMediaRecordId;
         this.title = title;
         this.category = category;
+        this.imageUrl = imageUrl;
         this.rating = rating;
-        this.text = text;
-    }
-
-    // Constructor for media entry creation
-    public MediaEntryDTO(UserDTO user, String title, String category) {
-        this.user = user;
-        this.title = title;
-        this.category = category;
+        this.releaseDate = releaseDate;
+        this.author = author;
     }
 }

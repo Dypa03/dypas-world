@@ -1,35 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import HomePage from './pages/HomePage'
+import Login from './pages/Login'
+import Register from './pages/Register'
 import './App.css'
+import MediaEntryPageComponent from './myComponents/MediaEntryPageComponent'
+import Header from './myComponents/Header'
+import { categoriesData } from './data/categoriesData'
+import { useEffect, useState } from 'react'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+
+  async function checkIfLoggedIn() {
+    try {
+      const res = await fetch("http://localhost:8080/api/user/user-info", {
+        credentials: "include"
+      });
+      console.log(res);
+      return res.ok; 
+    } catch (err) {
+      console.error("Errore durante il check login:", err);
+      return false;
+    }
+  }
+
+  useEffect(() => {
+    checkIfLoggedIn().then((loggedIn) => {
+      console.log("Utente loggato?", loggedIn);
+      setIsUserLoggedIn(loggedIn);
+    });
+  }, []);
+
+  const categoryRoutes = categoriesData.map((categoryObject) => (
+    <Route
+      key={categoryObject.categoryName}
+      path={`/${categoryObject.pageLink}`}
+      element={<MediaEntryPageComponent categoryObject={categoryObject} />}
+    />
+  ))
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage isUserLoggedIn={isUserLoggedIn} />} />
+        <Route path="/login" element={<Login isUserLoggedIn={isUserLoggedIn} />} />
+        <Route path="/register" element={<Register isUserLoggedIn={isUserLoggedIn} />} />
+        {categoryRoutes}
+      </Routes>
+    </Router>
   )
+
+  
 }
 
 export default App

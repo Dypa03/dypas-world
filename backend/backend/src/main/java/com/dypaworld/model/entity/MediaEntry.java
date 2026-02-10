@@ -1,16 +1,8 @@
 package com.dypaworld.model.entity;
-import java.time.LocalDateTime;
+import java.util.Set;
 
-import org.hibernate.annotations.CreationTimestamp;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -25,14 +17,14 @@ import lombok.Setter;
 @Entity
 @Table(name = "media_entries")
 public class MediaEntry {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "media_entry_id")
-    private Integer id;
+    @Column(name = "media_entry_id", unique = true, nullable = false)
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "api_media_record_id")
+    private String apiMediaRecordId;
 
     @Column(nullable = false)
     private String title;
@@ -40,20 +32,23 @@ public class MediaEntry {
     @Column(nullable = false)
     private String category;
 
-    private int rating;
+    @Column(columnDefinition = "TEXT")
+    private String imageUrl;
 
-    private String text;
+    private String releaseDate;
 
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    private String author;
+
+
+
+    @OneToMany(mappedBy = "mediaEntry")
+    @JsonIgnore
+    private Set<UserMediaEntry> userMediaEntries;
 
     // Additional constructor for media entry creation
-    public MediaEntry(User user, String title, String category, int rating, String text) {
-        this.user = user;
+    public MediaEntry(String title, String category, String imageUrl) {
         this.title = title;
         this.category = category;
-        this.rating = rating;
-        this.text = text;
+        this.imageUrl = imageUrl;
     }
 }
