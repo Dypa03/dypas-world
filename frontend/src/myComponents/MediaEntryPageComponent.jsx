@@ -171,9 +171,8 @@ export default function MediaEntryPageComponent(props) {
                     ...newMediaEntryData,
                     imageUrl: data.url
                 })
-                handleNewMediaEntrySubmit(finalData)
+                await handleNewMediaEntrySubmit(finalData);
             }
-            console.log(response)
         } catch(error) {
             console.error(error);
         }
@@ -433,38 +432,44 @@ export default function MediaEntryPageComponent(props) {
         </form>
 
     const addCustomMediaEntryForm = 
-        <div>
+        <div className="h-full flex flex-col justify-center">
             <form onSubmit={(e) => {
                 e.preventDefault();
 
                 handleNewCustomMediaEntrySubmit();
             }}
-                className=" p-6 rounded-lg flex flex-col gap-3 justify-center items-center"
+                className=" rounded-lg grid grid-cols-2 h-4/5 gap-10 "
             >
                     
-                    
+                <div className="column1 col h-full">
                     <img 
                         onClick={handleCustomImageUpload}
-                        className="rounded-3xl w-[240px] h-[360px] object-cover"
+                        className="rounded-3xl h-full w-full object-cover"
                         src={previewImageUrl} alt="" />
-                    <input type="file" name="imageUrl" id="imageUrl" ref={fileUploadRef} onChange={uploadCustomImageDisplay} hidden />
+                    <input type="file" name="imageUrl" id="imageUrl" ref={fileUploadRef} onChange={uploadCustomImageDisplay} hidden 
+                            className="bg-black bg-opacity-40 rounded-md text-center"/>
+                </div>
                     
-                    <label htmlFor="title">Title:</label>
-                    <input type="text" id="title" name="title" onChange={handleNewMediaEntryInputChange} />
+                <div className="column2 flex flex-col gap-4 justify-center">
+                    <div className="flex flex-col gap-1">
+                        <label htmlFor="title" className="text-xl font-bold">Title:</label>
+                        <input type="text" id="title" name="title" onChange={handleNewMediaEntryInputChange} className="bg-black bg-opacity-40 rounded-md p-2" />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                        <label htmlFor="releaseDate" className="text-xl font-bold">Release Date:</label>
+                        <input type="text" id="releaseDate" name="releaseDate" onChange={handleNewMediaEntryInputChange} className="bg-black bg-opacity-40 rounded-md p-2" />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                        <label htmlFor="author" className="text-xl font-bold ">Author:</label>
+                        <input type="text" id="author" name="author" onChange={handleNewMediaEntryInputChange} className="bg-black bg-opacity-40 rounded-md p-2" />
+                    </div>
 
-                    <label htmlFor="releaseDate">Release Date:</label>
-                    <input type="text" id="releaseDate" name="releaseDate" onChange={handleNewMediaEntryInputChange} />
-
-                    <label htmlFor="author">Author:</label>
-                    <input type="text" id="author" name="author" onChange={handleNewMediaEntryInputChange} />
-
-                    <label htmlFor="rating" className="text-xl font-bold mt-4">Insert your Rating:</label>
-                    
-                    <span className="flex items-center gap-1 mt text-xl">
+                    <label htmlFor="rating" className="text-xl font-bold">Insert your Rating:</label>
+                    <span className="flex items-center gap-1 text-xl">
                         
                         <input type="number" id="rating" name="rating" value={newMediaEntryData.rating} min="0" max="10" required step="0.1"
                         onChange={handleNewMediaEntryInputChange} 
-                        className="w-[45px] h-[40px] outline-none bg-black bg-opacity-40 rounded-md text-center "/> 
+                        className="w-[45px] h-[40px] outline-none bg-black bg-opacity-40 rounded-md text-center"/> 
                         <p>/ 10</p> 
                         <svg className="inline"
                         width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -474,41 +479,32 @@ export default function MediaEntryPageComponent(props) {
                         </svg>
                     </span>
                     
-                    <button className="w-1/2 bg-main-color hover:bg-secondary-color text-white font-bold py-2 px-4 rounded-3xl focus:outline-none focus:shadow-outline mt-2"
+                    <button className="w-1/2 bg-main-color hover:bg-secondary-color text-white font-bold p-3 rounded-3xl focus:outline-none focus:shadow-outline mt-1"
                     >Submit</button>
+                </div>
+                    
         
             </form>
         </div>
                         
 
     function handleFormShown() {
+        let resultContent = <div className="h-full"></div>
         if (searchFormMode == "search") {
-            return (
-                <div>
+            resultContent = <div className="h-full">
                     {searchMediaEntryForm}
-
                     {searchResultList} 
-                </div>) 
+            </div> 
         }  else if (searchFormMode == "add") {
-            return (
-                <div>
-                    {saveMediaEntryForm}
-                </div>
-            )
+            resultContent = saveMediaEntryForm
         } else if (searchFormMode == "addCustom") {
-            return (
-                <div>
-                    {addCustomMediaEntryForm}
-                </div>
-            )
+            resultContent = addCustomMediaEntryForm
         } else if (searchFormMode == "edit") {
-            return (
-                <div>
-                    {editMediaEntryForm}
-                    
-                </div>
-            )
+            resultContent = editMediaEntryForm
         }
+        return <div className="h-full">
+            {resultContent}
+        </div>
     }
 
     return (

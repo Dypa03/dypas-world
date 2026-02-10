@@ -49,17 +49,21 @@ public class S3Service {
         return amazonS3.getObject(bucketName, fileName);
     }
 
-    public String generatePresignedUrl(String fileName) {
+   /* public String generatePresignedUrl(String fileName) {
         GeneratePresignedUrlRequest generatePresignedUrlRequest =
             new GeneratePresignedUrlRequest(bucketName, fileName)
                     .withMethod(HttpMethod.GET);
 
         URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
         return url.toString();
-    }
-
+    }*/
+/*
     public String uploadFileAndGetUrl(String fileName, InputStream inputStream, long contentLength, String contentType) {
         uploadFile(fileName, inputStream, contentLength, contentType);
         return generatePresignedUrl(fileName);
+    }*/
+
+    public String getPublicUrl(String fileName) {
+        return String.format("https://%s.s3.eu-north-1.amazonaws.com/%s", bucketName, fileName);
     }
 }

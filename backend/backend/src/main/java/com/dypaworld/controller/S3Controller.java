@@ -28,26 +28,35 @@ public class S3Controller {
                 file.getSize(),
                 file.getContentType()
         );*/
-        String fileName = file.getOriginalFilename();
+        /*String fileName = file.getOriginalFilename();
         String presignedUrl = s3Service.uploadFileAndGetUrl(
+                fileName,
+                file.getInputStream(),
+                file.getSize(),
+                file.getContentType()
+        );*/
+
+        String fileName = file.getOriginalFilename();
+        s3Service.uploadFile(
                 fileName,
                 file.getInputStream(),
                 file.getSize(),
                 file.getContentType()
         );
 
+        String pubblicUrl = s3Service.getPublicUrl(fileName);
         Map<String, String> response = new HashMap<>();
         response.put("filename", fileName);
-        response.put("url", presignedUrl);
+        response.put("url", pubblicUrl);
 
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("url/{fileName}")
+    /*@GetMapping("url/{fileName}")
     public ResponseEntity<String> getPresignedUrl(@PathVariable String fileName) {
         String url = s3Service.generatePresignedUrl(fileName);
         return ResponseEntity.ok(url);
-    }
+    }*/
 
     @GetMapping("/download/{fileName}")
     public String downloadFile(@PathVariable String fileName) {
