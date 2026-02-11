@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import MediaEntryCard from "./MediaEntryCard";
-import Header from "./Header"
-import Footer from "./Footer";
-import ScrollToTopButton from "./ScrollToTopButton";
+import MediaEntryCard from "../myComponents/MediaEntryCard";
+import Header from "../myComponents/Header"
+import Footer from "../myComponents/Footer";
+import ScrollToTopButton from "../myComponents/ScrollToTopButton";
 
-
+import uploadTemplate from '../assets/upload.jpg'
 
 
 export default function MediaEntryPageComponent(props) {
@@ -31,7 +31,6 @@ export default function MediaEntryPageComponent(props) {
         rating: 0
     });
 
-    const [previewImageUrl, setPreviewImageUrl] = useState(null);
 
     const [mediaEntryToEdit, setMediaEntryToEdit] = useState({
         mediaEntryId: 0,
@@ -40,9 +39,9 @@ export default function MediaEntryPageComponent(props) {
         rating: 0
     });
 
-    const fileUploadRef = useRef();
+    const [previewImageUrl, setPreviewImageUrl] = useState(null);
 
-    
+    const fileUploadRef = useRef();
 
     function generatePassword(length) {
         const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()';
@@ -75,7 +74,6 @@ export default function MediaEntryPageComponent(props) {
     const handleSearchFormDataSubmit = (e) => {
         e.preventDefault();
         fetchMediaEntriesFromApi(searchFormData);
-        console.log(searchFormData);
     };
 
     const handleNewMediaEntryDataChange = (data) => {
@@ -445,7 +443,7 @@ export default function MediaEntryPageComponent(props) {
                     <img 
                         onClick={handleCustomImageUpload}
                         className="rounded-3xl h-full w-full object-cover"
-                        src={previewImageUrl} alt="" />
+                        src={previewImageUrl ? previewImageUrl : uploadTemplate} alt="" />
                     <input type="file" name="imageUrl" id="imageUrl" ref={fileUploadRef} onChange={uploadCustomImageDisplay} hidden 
                             className="bg-black bg-opacity-40 rounded-md text-center"/>
                 </div>
