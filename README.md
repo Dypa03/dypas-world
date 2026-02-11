@@ -23,7 +23,7 @@ There are three main controllers: **UserController**, **MediaEntryController** a
 - `/user-info`, which is used by the frontend to check if the user is logged in. It works both with form logged user or OAuth2 user.
 
 ### MediaEntry Controller
-- `/add`, just adds a mediaEntry in the database, associating it with the logged user;
+- `/add`, simply adds a mediaEntry in the database, associating it with the logged in user;
 - `/get-all-by-category-user`, returns a list of all the mediaEntries of the selected category to the user;
 - `/update-rating`, updates the user rating of the selected mediaEntry;
 - `/delete`, deletes the mediaEntry with the corrisponding id.
@@ -34,7 +34,8 @@ There are three main controllers: **UserController**, **MediaEntryController** a
 ## Frontend Components
 There are only two important pages to discuss: **App** and **MediaEntryPage**.
 ### APP
-App has a method checkIfLoggedIn which returns a boolean that is passed to App's children. To create each category page, App loops through categoriesData, which contains the informations about the look(on the homepage) and the api used for each category.
+App has a method checkIfLoggedIn which returns a boolean that is passed to App's children. To create each category page, App loops through **categoriesData**, which contains the informations about the appearance(on the homepage) and the API used by each category.
+
 ### MediaEntryPage
 MediaEntryPage uses the following props:
 - `categoryName`, used to assign the category to a new mediaEntry;
@@ -42,21 +43,21 @@ MediaEntryPage uses the following props:
 - `searchDataResultAdapter`, since each API is different from each other, this function tells us how to extract the needed data from the API call result;
 - `mediaEntryFromApiAdapter`, as said before, since each API is different from each other, this function **adapts** the retrieved data to what the page needs to **map**, by creating an object which keys are the same for each category. This way it's not necessary to create a page for each category;
 - `categoryName, categoryTitle, categoryBasedMessage`, these are used just to make the user understand which page they are on.
-- 
+
 MediaEntry page has many React state elements, which are:
-- `userMediaEntriesList`, used to save and display the mediaEntries the user has previously saved;
-- `searchFormData`, the search bar content the user writes for a new mediaEntry;
-- `searchResults`, the result of the user search for a new mediaEntry;
-- `searchFormMode, isSearchFormShown`, respectively in store which mode is the searchForm(search, add, addCustom or edit) and a boolean that tells us if the form is shown; 
+- `userMediaEntriesList`, used to display the mediaEntries the user has previously saved;
+- `searchFormData`, the search bar content the user inserts for a new mediaEntry;
+- `searchResults`, the results list of the user's query for a new mediaEntry;
+- `searchFormMode, isSearchFormShown`, respectively the active mode of the searchForm(*search, add, addCustom or edit*) and a boolean that sets if the form is shown; 
 - `newMediaEntryData`, the most important one, stores the data of a new mediaEntry to submit, both custom or from API;
 - `mediaEntryToEdit`, the data of the existing mediaEntry the user chooses to edit(for rating only);
 - `previewImageUrl`, needed to show the chosen image by the user for a new custom entry;
 
 > [!NOTE]
-> There are some things that are missing, like API tests, better responsive adaptation, etc.
+> There are some things that are missing, like API tests, better responsive adaptation, etc. 
 I know some of these aspects are important, but honestly I want to move on a new project. I've learned a lot from this one and going further atm feels so draining, so I prefer to start anew.
 This doesn't mean the project is dead, just that I won't work on it for a while. So please still leave feedback on the form, it helps me a lot.
 
-Thank you and have a wonderful day!
-Love,
+Thank you and have a wonderful day!  
+Love,  
 Dypa <3
