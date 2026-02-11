@@ -3,7 +3,7 @@ import HomePage from './pages/HomePage'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import './App.css'
-import MediaEntryPageComponent from './myComponents/MediaEntryPageComponent'
+import MediaEntryPageComponent from './pages/MediaEntryPage'
 import Header from './myComponents/Header'
 import { categoriesData } from './data/categoriesData'
 import { useEffect, useState } from 'react'
@@ -16,7 +16,6 @@ function App() {
       const res = await fetch("http://localhost:8080/api/user/user-info", {
         credentials: "include"
       });
-      console.log(res);
       return res.ok; 
     } catch (err) {
       console.error("Errore durante il check login:", err);

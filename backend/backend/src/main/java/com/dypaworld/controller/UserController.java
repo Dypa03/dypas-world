@@ -103,20 +103,4 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/is-user-logged")
-    public ResponseEntity<?> isUserLogged(Authentication authentication) {
-        if (authentication == null ||
-                !authentication.isAuthenticated() ||
-                authentication instanceof AnonymousAuthenticationToken) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        return ResponseEntity.ok().build();
-    }
-
-
-    @GetMapping(path = "/miao")
-    public ResponseEntity<String> miao() {
-        return ResponseEntity.ok("Miao");
-    }
 }

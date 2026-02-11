@@ -58,8 +58,8 @@ public class S3Controller {
         return ResponseEntity.ok(url);
     }*/
 
-    @GetMapping("/download/{fileName}")
+    /*@GetMapping("/download/{fileName}")
     public String downloadFile(@PathVariable String fileName) {
         return s3Service.downloadFile(fileName).getKey();
-    }
+    }*/
 }
