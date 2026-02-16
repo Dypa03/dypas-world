@@ -29,7 +29,7 @@ export default function Header() {
 
     async function checkIfLoggedIn() {
         try {
-        const res = await fetch("http://localhost:8080/api/user/user-info", {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/user-info`, {
             credentials: "include"
         });
         console.log(res);
@@ -42,7 +42,7 @@ export default function Header() {
 
     async function logout() {
         try {
-        const res = await fetch("http://localhost:8080/logout", {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/logout`, {
             credentials: "include"
         });
         console.log(res);

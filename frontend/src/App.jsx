@@ -13,7 +13,7 @@ function App() {
 
   async function checkIfLoggedIn() {
     try {
-      const res = await fetch("http://localhost:8080/api/user/user-info", {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/user-info`, {
         credentials: "include"
       });
       return res.ok; 
