@@ -87,7 +87,7 @@ export default function MediaEntryPageComponent(props) {
         try {
             
 
-            const response = await fetch(`http://localhost:8080/api/media-entry/get-all-by-category-user?category=${props.categoryName.toLowerCase()}`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/media-entry/get-all-by-category-user?category=${props.categoryName.toLowerCase()}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -114,7 +114,7 @@ export default function MediaEntryPageComponent(props) {
         const dataToSubmit = overrideData || newMediaEntryData;
 
         try {
-            const response = await fetch("http://localhost:8080/api/media-entry/add", {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/media-entry/add`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -156,7 +156,7 @@ export default function MediaEntryPageComponent(props) {
             const formData = new FormData();
             formData.append("file", uploadedFile)
 
-            const response = await fetch("http://localhost:8080/s3/upload", {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/s3/upload`, {
                 method: "post",
                 body: formData
             })
@@ -178,7 +178,7 @@ export default function MediaEntryPageComponent(props) {
 
     const handleMediaEntryToEditSubmit = async () => {
         try {
-            const response = await fetch("http://localhost:8080/api/media-entry/update-rating", {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/media-entry/update-rating`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -223,7 +223,7 @@ export default function MediaEntryPageComponent(props) {
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/api/media-entry/delete/${mediaEntryId}`, options);
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/media-entry/delete/${mediaEntryId}`, options);
             if (response.ok) {
                 console.log("wow");
                 loadUserEntryDataList();

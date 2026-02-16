@@ -21,7 +21,7 @@ export default function Register() {
         event.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:8080/api/user/register", {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
