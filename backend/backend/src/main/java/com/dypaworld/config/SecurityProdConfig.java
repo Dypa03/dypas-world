@@ -25,12 +25,15 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
+import java.util.Map;
 
 @Configuration
 @Profile("prod")
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityProdConfig {
+
+    Map<String, String> env = System.getenv();
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http, CustomOAuth2UserService customOAuth2UserService) throws Exception {
@@ -43,7 +46,7 @@ public class SecurityProdConfig {
             .oauth2Login(oauth2 ->
                     oauth2
                             .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                            .defaultSuccessUrl("http://localhost:5173", true))
+                            .defaultSuccessUrl(env.get("FRONTEND_URL"), true))
             .cors(Customizer.withDefaults())
             .securityContext((securityContext) -> securityContext
                     .requireExplicitSave(false)
@@ -69,7 +72,7 @@ public class SecurityProdConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedOrigins(List.of(env.get("FRONTEND_URL")));
         config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
