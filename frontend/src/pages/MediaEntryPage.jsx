@@ -537,7 +537,7 @@ export default function MediaEntryPageComponent(props) {
                     </button>
                 </div>
 
-                <div className="w-5/6 md:grid sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 flex flex-col items-center gap-16 mt-10">
+                <div className=" md:grid sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 flex flex-col items-center justify-items-center gap-8 mt-10">
                 { userMediaEntriesList.length > 0 ? (
                     userMediaEntriesList.map((mediaItem) => (
                         <div key={mediaItem.mediaEntryId}
