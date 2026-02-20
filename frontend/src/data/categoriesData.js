@@ -182,7 +182,7 @@ export const categoriesData = [
         pageLink: "music-albums",
         categoryBasedMessage: "listened to",
         
-        querySearchPrefix: `http://ws.audioscrobbler.com/2.0/?method=album.search&api_key=${import.meta.env.VITE_MUSIC_API_KEY}&format=json&album=`,
+        querySearchPrefix: `https://ws.audioscrobbler.com/2.0/?method=album.search&api_key=${import.meta.env.VITE_MUSIC_API_KEY}&format=json&album=`,
         headers: {
             "accept": 'application/json',
         },
