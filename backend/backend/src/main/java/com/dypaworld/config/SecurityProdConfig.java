@@ -41,7 +41,7 @@ public class SecurityProdConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorizeRequests ->
                     authorizeRequests
-                            .requestMatchers("/login", "/api/user/user-info", "/api/user/login", "/api/user/register", "/error", "/s3/upload").permitAll()
+                            .requestMatchers("/login", "/api/user/**", "/error", "/s3/upload", "oauth2/**", "login/oauth2/**").permitAll()
                             .anyRequest().authenticated())
             .oauth2Login(oauth2 ->
                     oauth2
@@ -72,9 +72,10 @@ public class SecurityProdConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(env.get("FRONTEND_URL")));
+        config.setAllowedOrigins(List.of(env.get("FRONTEND_URL"), "http://localhost:5173"));
         config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
+        config.setExposedHeaders(List.of("Set-Cookie"));
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
