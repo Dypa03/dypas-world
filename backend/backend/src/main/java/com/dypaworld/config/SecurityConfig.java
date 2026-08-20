@@ -1,82 +1,86 @@
 // backend/src/main/java/com/dypaworld/SecurityConfig.java
 package com.dypaworld.config;
 
-import com.dypaworld.exceptionhandling.CustomAccessDeniedHandler;
-import com.dypaworld.exceptionhandling.CustomBasicAuthenticationEntryPoint;
 import com.dypaworld.service.CustomOAuth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.authentication.password.CompromisedPasswordChecker;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
+import java.util.Map;
 
 @Configuration
+@Profile("!prod")
 @EnableWebSecurity
 @EnableMethodSecurity
-@Profile("!prod")
 public class SecurityConfig {
+
+    Map<String, String> env = System.getenv();
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http, CustomOAuth2UserService customOAuth2UserService) throws Exception {
         http
-            .sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession"))
-            .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests((authorizeRequests) ->
-                    authorizeRequests
-                            .requestMatchers("/login", "/api/user/user-info", "/api/user/login", "/api/user/register", "/error").permitAll()
-                            .requestMatchers("/api/media-entry/add", "/api/media-entry/delete").authenticated())
-            .cors(Customizer.withDefaults());
-        http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
-        http.exceptionHandling(ehc -> ehc.accessDeniedHandler(new CustomAccessDeniedHandler()).accessDeniedPage("/denied"));
-                /*.sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                        .maximumSessions(1)
-                        .maxSessionsPreventsLogin(false)
-                )
-                .rememberMe(remember -> remember
-                        .tokenRepository(persistentTokenRepository())
-                        .tokenValiditySeconds(86400)
-                        .userDetailsService(customOAuth2UserService)
-                )*/
-                //.formLogin(flc -> flc.disable())
-                //.httpBasic(hbc -> hbc.disable())
-
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers("/login", "/api/user/**", "/error", "/s3/upload", "oauth2/**", "login/oauth2/**").permitAll()
+                                .anyRequest().authenticated())
+                .oauth2Login(oauth2 ->
+                        oauth2
+                                .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                                .defaultSuccessUrl(env.get("FRONTEND_URL"), true))
+                .cors(Customizer.withDefaults())
+                .securityContext((securityContext) -> securityContext
+                        .requireExplicitSave(false)
+                );
         return http.build();
     }
-
-
-
-
-    /*@Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user = User.withUsername("user").password("$2a$12$vJcp3hWSZ8Wev1KUrKnsDepjqi8dpNc1QwjHzjpZL/B9cFWZ4oo/u").authorities("read").build();
-        UserDetails admin = User.withUsername("admin").password("$2a$12$qzv/7/LEPqbA4ryXSh6f2eInJ0Uoo40EO0DqcJ9uV5afHymg2d3UC").authorities("admin").build();
-        return new InMemoryUserDetailsManager(user, admin);
-    }*/
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    /*
     @Bean
-    public CompromisedPasswordChecker compromisedPasswordChecker() {
-        return new HaveIBeenPwnedPasswordChecker();
+    public AuthenticationManager authenticationManager(
+            UserDetailsService userDetailsService,
+            PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider(userDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
+
+        return new ProviderManager(authenticationProvider);
     }
-    */
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of(env.get("FRONTEND_URL"), "http://localhost:5173"));
+        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setExposedHeaders(List.of("Set-Cookie"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
+
 }
